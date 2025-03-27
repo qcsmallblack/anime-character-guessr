@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { getRandomCharacter, getCharacterAppearances, getCharacterCV, generateFeedback } from './utils/anime';
+import { getRandomCharacter, getCharacterAppearances, generateFeedback } from './utils/anime';
 import './App.css';
 
 function App() {
@@ -12,7 +12,6 @@ function App() {
   const [isGuessing, setIsGuessing] = useState(false);
   const [gameEnd, setGameEnd] = useState(false);
   const searchContainerRef = useRef(null);
-  const [selectedCharacter, setSelectedCharacter] = useState(null);
   const [gameEndPopup, setGameEndPopup] = useState(null);
   const [answerCharacter, setAnswerCharacter] = useState(null);
 
@@ -29,17 +28,28 @@ function App() {
 
   // Initialize game
   useEffect(() => {
+    let isMounted = true;
+
     const initializeGame = async () => {
       try {
         const character = await getRandomCharacter();
-        setAnswerCharacter(character);
+        if (isMounted) {
+          setAnswerCharacter(character);
+          // console.log('别偷看答案别偷看答案别偷看答案别偷看答案别偷看答案', character);
+        }
       } catch (error) {
         console.error('Failed to initialize game:', error);
-        alert('游戏初始化失败，请刷新页面重试');
+        if (isMounted) {
+          alert('游戏初始化失败，请刷新页面重试');
+        }
       }
     };
 
     initializeGame();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   // Handle click outside to close dropdown
@@ -98,20 +108,17 @@ function App() {
     if (isGuessing || !answerCharacter) return; // Prevent multiple guesses while waiting
     
     setIsGuessing(true);
-    setSelectedCharacter(character); // Store selected character before clearing search
     
     try {
       // Get additional character details
       const appearances = await getCharacterAppearances(character.id);
-      const cv = await getCharacterCV(character.id);
       
       const guessData = {
         ...character,
         appearances: appearances.appearances,
         lastAppearanceDate: appearances.lastAppearanceDate,
         lastAppearanceRating: appearances.lastAppearanceRating,
-        metaTags: appearances.metaTags,
-        cv
+        metaTags: appearances.metaTags
       };
 
       // Check if guess is correct
@@ -126,8 +133,6 @@ function App() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: 'yes',
-          cv: guessData.cv,
-          cvFeedback: 'yes',
           lastAppearance: guessData.lastAppearanceDate,
           lastAppearanceFeedback: '=',
           lastAppearanceRating: guessData.lastAppearanceRating,
@@ -157,8 +162,6 @@ function App() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          cv: guessData.cv,
-          cvFeedback: feedback.cv.feedback,
           lastAppearance: guessData.lastAppearanceDate,
           lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
           lastAppearanceRating: guessData.lastAppearanceRating,
@@ -185,8 +188,6 @@ function App() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          cv: guessData.cv,
-          cvFeedback: feedback.cv.feedback,
           lastAppearance: guessData.lastAppearanceDate,
           lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
           lastAppearanceRating: guessData.lastAppearanceRating,
@@ -204,7 +205,6 @@ function App() {
       alert('出错了，请重试');
     } finally {
       setIsGuessing(false);
-      setSelectedCharacter(null);
       setSearchQuery('');
       setSearchResults([]);
     }
@@ -217,7 +217,7 @@ function App() {
   return (
     <div className="container">
       <div className="social-links">
-        <a href="https://github.com/yourusername/anime-character-guessr" target="_blank" rel="noopener noreferrer" className="social-link">
+        <a href="https://github.com/kennylimz/anime-character-guessr" target="_blank" rel="noopener noreferrer" className="social-link">
           <i className="fab fa-github"></i>
         </a>
         <a href="https://bangumi.tv/" target="_blank" rel="noopener noreferrer" className="social-link">
@@ -231,7 +231,7 @@ function App() {
             <input
               type="text"
               className="search-input"
-              placeholder="搜不到去bangumi找全名"
+              placeholder="搜不到？去bangumi找别名"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               disabled={isGuessing || gameEnd}
@@ -263,7 +263,7 @@ function App() {
             onClick={handleSearch}
             disabled={!searchQuery.trim() || isSearching || isGuessing || gameEnd}
           >
-            {isSearching ? '搜索中...' : isGuessing ? '猜测中...' : '搜索'}
+            {isSearching ? '在搜了...' : isGuessing ? '在猜了...' : 'GO'}
           </button>
         </div>
       </div>
@@ -287,7 +287,6 @@ function App() {
               <th></th>
               <th>名字</th>
               <th>性别</th>
-              <th>声优</th>
               <th>收藏量</th>
               <th>最后登场</th>
               <th>标签</th>
@@ -309,11 +308,6 @@ function App() {
                 <td>
                   <span className={`feedback-cell ${guess.genderFeedback === 'yes' ? 'correct' : ''}`}>
                     {getGenderEmoji(guess.gender)}
-                  </span>
-                </td>
-                <td>
-                  <span className={`feedback-cell ${guess.cvFeedback === 'yes' ? 'correct' : ''}`}>
-                    {guess.cv}
                   </span>
                 </td>
                 <td>

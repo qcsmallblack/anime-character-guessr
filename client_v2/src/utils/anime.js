@@ -24,9 +24,12 @@ async function getSubjectDetails(subjectId) {
 
 async function getCharacterAppearances(characterId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/subjects`);
+    const [subjectsResponse, personsResponse] = await Promise.all([
+      axios.get(`${API_BASE_URL}/characters/${characterId}/subjects`),
+      axios.get(`${API_BASE_URL}/characters/${characterId}/persons`)
+    ]);
 
-    if (!response.data || !response.data.length) {
+    if (!subjectsResponse.data || !subjectsResponse.data.length) {
       return {
         appearances: [],
         lastAppearanceDate: -1,
@@ -36,7 +39,7 @@ async function getCharacterAppearances(characterId) {
     }
 
     // Filter appearances by staff and type
-    const filteredAppearances = response.data.filter(appearance => 
+    const filteredAppearances = subjectsResponse.data.filter(appearance => 
       (appearance.staff === '主角' || appearance.staff === '配角') && 
       appearance.type === 2
     );
@@ -74,6 +77,16 @@ async function getCharacterAppearances(characterId) {
       })
     );
 
+    // Add CV to meta tags if available
+    if (personsResponse.data && personsResponse.data.length) {
+      const animeVAs = personsResponse.data.filter(person => person.subject_type === 2);
+      if (animeVAs.length > 0) {
+        animeVAs.forEach(person => {
+          allMetaTags.add(`${person.name}`);
+        });
+      }
+    }
+
     return {
       appearances,
       lastAppearanceDate,
@@ -88,44 +101,6 @@ async function getCharacterAppearances(characterId) {
       lastAppearanceRating: 0,
       metaTags: []
     };
-  }
-}
-
-async function getCharacterCV(characterId) {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/persons`);
-    
-    if (!response.data || !response.data.length) {
-      return '未知';
-    }
-
-    // Filter for anime voice actors (subject_type = 2)
-    const animeVAs = response.data.filter(person => person.subject_type === 2);
-
-    if (animeVAs.length === 0) {
-      return '未知';
-    }
-
-    // Count occurrences of each name
-    const nameCounts = {};
-    animeVAs.forEach(person => {
-      nameCounts[person.name] = (nameCounts[person.name] || 0) + 1;
-    });
-
-    // Find the name with the highest count
-    let mostCommonName = '未知';
-    let maxCount = 0;
-    for (const [name, count] of Object.entries(nameCounts)) {
-      if (count > maxCount) {
-        maxCount = count;
-        mostCommonName = name;
-      }
-    }
-
-    return mostCommonName;
-  } catch (error) {
-    console.error('Error fetching character CV:', error);
-    return '未知';
   }
 }
 
@@ -146,14 +121,12 @@ async function getCharacterDetails(characterId) {
       ? response.data.gender 
       : '?';
 
-    // Get CV
-    const cv = await getCharacterCV(characterId);
-
     return {
       name_cn: nameCn,
       gender,
-      popularity: response.data.stat.collects,
-      cv
+      image: response.data.images.medium,
+      summary: response.data.summary,
+      popularity: response.data.stat.collects
     };
   } catch (error) {
     console.error('Error fetching character details:', error);
@@ -226,16 +199,9 @@ async function getRandomCharacter() {
     const appearances = await getCharacterAppearances(selectedCharacter.id);
 
     return {
-      id: selectedCharacter.id,
-      name: selectedCharacter.name,
-      nameCn: characterDetails.name_cn,
-      gender: characterDetails.gender,
-      popularity: characterDetails.popularity,
-      cv: characterDetails.cv,
-      appearances: appearances.appearances,
-      lastAppearanceDate: appearances.lastAppearanceDate,
-      lastAppearanceRating: appearances.lastAppearanceRating,
-      metaTags: appearances.metaTags
+      ...selectedCharacter,
+      ...characterDetails,
+      ...appearances
     };
   } catch (error) {
     console.error('Error getting random character:', error);
@@ -324,17 +290,11 @@ function generateFeedback(guess, answerCharacter) {
     };
   }
 
-  result.cv = {
-    guess: guess.cv,
-    feedback: guess.cv === answerCharacter.cv ? 'yes' : 'no'
-  };
-
   return result;
 }
 
 export {
   getRandomCharacter,
   getCharacterAppearances,
-  getCharacterCV,
   generateFeedback
 }; 
