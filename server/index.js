@@ -12,7 +12,8 @@ const io = new Server(server, {
       'http://localhost:5173',
       'https://anime-character-guessr.onrender.com',
       'https://anime-character-guessr-fkt5cwjsc-kennylimzs-projects.vercel.app',
-      'https://anime-character-guessr.vercel.app'
+      'https://anime-character-guessr.vercel.app',
+      'https://anime-character-guessr.netlify.app'
     ],
     methods: ['GET', 'POST'],
     credentials: true
@@ -24,7 +25,8 @@ app.use(cors({
     'http://localhost:5173',
     'https://anime-character-guessr.onrender.com',
     'https://anime-character-guessr-fkt5cwjsc-kennylimzs-projects.vercel.app',
-    'https://anime-character-guessr.vercel.app'
+    'https://anime-character-guessr.vercel.app',
+    'https://anime-character-guessr.netlify.app'
   ],
   credentials: true
 }));
