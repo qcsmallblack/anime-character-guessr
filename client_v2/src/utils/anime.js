@@ -4,11 +4,7 @@ const API_BASE_URL = 'https://api.bgm.tv/v0';
 
 async function getSubjectDetails(subjectId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}`, {
-      headers: {
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
-      }
-    });
+    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}`);
 
     if (!response.data) {
       throw new Error('No subject details found');
@@ -28,11 +24,7 @@ async function getSubjectDetails(subjectId) {
 
 async function getCharacterAppearances(characterId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/subjects`, {
-      headers: {
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
-      }
-    });
+    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/subjects`);
 
     if (!response.data || !response.data.length) {
       return {
@@ -101,11 +93,7 @@ async function getCharacterAppearances(characterId) {
 
 async function getCharacterCV(characterId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/persons`, {
-      headers: {
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
-      }
-    });
+    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}/persons`);
     
     if (!response.data || !response.data.length) {
       return '未知';
@@ -143,11 +131,7 @@ async function getCharacterCV(characterId) {
 
 async function getCharacterDetails(characterId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}`, {
-      headers: {
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
-      }
-    });
+    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}`);
 
     if (!response.data) {
       throw new Error('No character details found');
@@ -179,11 +163,7 @@ async function getCharacterDetails(characterId) {
 
 async function getCharactersBySubjectId(subjectId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}/characters`, {
-      headers: {
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
-      }
-    });
+    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}/characters`);
 
     if (!response.data || !response.data.length) {
       throw new Error('No characters found for this anime');
@@ -221,8 +201,7 @@ async function getRandomCharacter() {
       }
     }, {
       headers: {
-        'Content-Type': 'application/json',
-        'User-Agent': 'kennylimz/AnimeCharacterGuessr'
+        'Content-Type': 'application/json'
       }
     });
 
