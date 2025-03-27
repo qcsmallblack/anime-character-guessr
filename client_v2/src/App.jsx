@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { getRandomCharacter, getCharacterAppearances, getCharacterCV, generateFeedback } from './services/animeService';
+import { getRandomCharacter, getCharacterAppearances, getCharacterCV, generateFeedback } from './utils/anime';
 import './App.css';
 
 function App() {
@@ -216,6 +216,14 @@ function App() {
 
   return (
     <div className="container">
+      <div className="social-links">
+        <a href="https://github.com/yourusername/anime-character-guessr" target="_blank" rel="noopener noreferrer" className="social-link">
+          <i className="fab fa-github"></i>
+        </a>
+        <a href="https://bangumi.tv/" target="_blank" rel="noopener noreferrer" className="social-link">
+          <img src="https://avatars.githubusercontent.com/u/7521082?s=200&v=4" alt="Bangumi" className="bangumi-icon" />
+        </a>
+      </div>
       {/* Search Section */}
       <div className="search-section">
         <div className="search-box">
