@@ -287,8 +287,8 @@ function App() {
               <th></th>
               <th>名字</th>
               <th>性别</th>
-              <th>收藏量</th>
-              <th>最后登场</th>
+              <th>人气</th>
+              <th>最后登场<br/>评分/年份</th>
               <th>标签</th>
               <th>共同出演</th>
             </tr>

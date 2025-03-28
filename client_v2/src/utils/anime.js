@@ -1,15 +1,25 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://api.bgm.tv/v0';
+const API_BASE_URL = 'https://api.bgm.tv';
 
 async function getSubjectDetails(subjectId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}`);
+    const response = await axios.get(`${API_BASE_URL}/v0/subjects/${subjectId}`);
 
     if (!response.data) {
       throw new Error('No subject details found');
     }
-    let year = response.data.date ? parseInt(response.data.date.split('-')[0]) : null;
+
+    // Get air date and current date
+    const airDate = response.data.date;
+    const currentDate = new Date();
+    
+    // If air date is in the future, return null to indicate this show should be ignored
+    if (airDate && new Date(airDate) > currentDate) {
+      return null;
+    }
+
+    let year = airDate ? parseInt(airDate.split('-')[0]) : null;
     return {
       name: response.data.name_cn || response.data.name,
       year,
@@ -25,8 +35,8 @@ async function getSubjectDetails(subjectId) {
 async function getCharacterAppearances(characterId) {
   try {
     const [subjectsResponse, personsResponse] = await Promise.all([
-      axios.get(`${API_BASE_URL}/characters/${characterId}/subjects`),
-      axios.get(`${API_BASE_URL}/characters/${characterId}/persons`)
+      axios.get(`${API_BASE_URL}/v0/characters/${characterId}/subjects`),
+      axios.get(`${API_BASE_URL}/v0/characters/${characterId}/persons`)
     ]);
 
     if (!subjectsResponse.data || !subjectsResponse.data.length) {
@@ -63,6 +73,9 @@ async function getCharacterAppearances(characterId) {
       filteredAppearances.map(async appearance => {
         try {
           const details = await getSubjectDetails(appearance.id);
+          // Skip if details is null (unaired show)
+          if (!details) return null;
+          
           if (details.year !== null && (lastAppearanceDate === -1 || details.year > lastAppearanceDate)) {
             lastAppearanceDate = details.year;
             lastAppearanceRating = details.rating;
@@ -72,10 +85,13 @@ async function getCharacterAppearances(characterId) {
           return details.name;
         } catch (error) {
           console.error(`Failed to get details for subject ${appearance.id}:`, error);
-          return appearance.name_cn || appearance.name;
+          return null;
         }
       })
     );
+
+    // Filter out null values (unaired shows) from appearances
+    const validAppearances = appearances.filter(appearance => appearance !== null);
 
     // Add CV to meta tags if available
     if (personsResponse.data && personsResponse.data.length) {
@@ -88,7 +104,7 @@ async function getCharacterAppearances(characterId) {
     }
 
     return {
-      appearances,
+      appearances: validAppearances,
       lastAppearanceDate,
       lastAppearanceRating,
       metaTags: Array.from(allMetaTags) // Convert Set back to array
@@ -106,7 +122,7 @@ async function getCharacterAppearances(characterId) {
 
 async function getCharacterDetails(characterId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/characters/${characterId}`);
+    const response = await axios.get(`${API_BASE_URL}/v0/characters/${characterId}`);
 
     if (!response.data) {
       throw new Error('No character details found');
@@ -122,7 +138,7 @@ async function getCharacterDetails(characterId) {
       : '?';
 
     return {
-      name_cn: nameCn,
+      nameCn: nameCn,
       gender,
       image: response.data.images.medium,
       summary: response.data.summary,
@@ -136,7 +152,7 @@ async function getCharacterDetails(characterId) {
 
 async function getCharactersBySubjectId(subjectId) {
   try {
-    const response = await axios.get(`${API_BASE_URL}/subjects/${subjectId}/characters`);
+    const response = await axios.get(`${API_BASE_URL}/v0/subjects/${subjectId}/characters`);
 
     if (!response.data || !response.data.length) {
       throw new Error('No characters found for this anime');
@@ -163,7 +179,7 @@ async function getRandomCharacter() {
     const offset = Math.floor(Math.random() * 100);
     
     // Search for anime from that year
-    const response = await axios.post(`${API_BASE_URL}/search/subjects?limit=1&offset=${offset}`, {
+    const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=1&offset=${offset}`, {
       "sort": "heat",
       "filter": {
           "type": [2],
