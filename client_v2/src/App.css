@@ -386,23 +386,26 @@
 
 /* Feedback cells */
 .feedback-cell {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
   border-radius: 6px;
   transition: all 0.2s;
   min-width: 80%;
   text-align: center;
   font-weight: 500;
+  background: transparent;
 }
 
 .feedback-cell.correct {
-  background: #bbf7d0;
+  background-color: #bbf7d0;
   color: #14532d;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .feedback-cell.partial {
-  background: #fef9c3;
+  background-color: #fef9c3;
   color: #854d0e;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
