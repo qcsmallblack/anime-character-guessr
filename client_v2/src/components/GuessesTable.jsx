@@ -10,8 +10,8 @@ function GuessesTable({ guesses, getGenderEmoji }) {
             <th>名字</th>
             <th>性别</th>
             <th>人气</th>
-            <th>最后登场<br/>评分/年份</th>
-            <th>标签</th>
+            <th>BGM最高分<br/>最后登场</th>
+            <th>作品标签</th>
             <th>共同出演</th>
           </tr>
         </thead>
@@ -40,7 +40,7 @@ function GuessesTable({ guesses, getGenderEmoji }) {
               <td>
                 <div className="appearance-container">
                   <div className={`appearance-rating ${guess.ratingFeedback === '=' ? 'correct' : (guess.ratingFeedback === '+' || guess.ratingFeedback === '-') ? 'partial' : ''}`}>
-                    {guess.lastAppearanceRating}{(guess.ratingFeedback === '+' || guess.ratingFeedback === '++') ? ' ↓' : (guess.ratingFeedback === '-' || guess.ratingFeedback === '--') ? ' ↑' : ''}
+                    {guess.highestRating}{(guess.ratingFeedback === '+' || guess.ratingFeedback === '++') ? ' ↓' : (guess.ratingFeedback === '-' || guess.ratingFeedback === '--') ? ' ↑' : ''}
                   </div>
                   <div className={`appearance-year ${guess.lastAppearanceFeedback === '=' ? 'correct' : (guess.lastAppearanceFeedback === '+' || guess.lastAppearanceFeedback === '-') ? 'partial' : ''}`}>
                     {guess.lastAppearance}{(guess.lastAppearanceFeedback === '+' || guess.lastAppearanceFeedback === '++') ? ' ↓' : (guess.lastAppearanceFeedback === '-' || guess.lastAppearanceFeedback === '--') ? ' ↑' : ''}

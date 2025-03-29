@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { all } from 'axios';
 
 const API_BASE_URL = 'https://api.bgm.tv';
 
@@ -24,10 +24,10 @@ async function getSubjectDetails(subjectId) {
     // Extract meta tags and add animation studios
     const meta_tags = response.data.meta_tags || [];
     const animationStudio = response.data.infobox?.find(item => item.key === '动画制作')?.value;
-    if (animationStudio) {
+    if (animationStudio && animationStudio.length < 50) {
       // Split by both '×' and '/' and trim whitespace from each studio
-      const studios = animationStudio.split(/[×/]/).map(studio => studio.trim()).filter(studio => studio.length < 30);
-      meta_tags.push(...studios);
+      const studioSplit = animationStudio.split(/[×/()、（）\[\]]/).map(studio => studio.trim()).filter(studio => studio.length < 30 && studio.length > 0);
+      meta_tags.push(...studioSplit);
     }
 
     return {
@@ -53,7 +53,7 @@ async function getCharacterAppearances(characterId) {
       return {
         appearances: [],
         lastAppearanceDate: -1,
-        lastAppearanceRating: 0,
+        highestRating: 0,
         metaTags: []
       };
     }
@@ -68,14 +68,15 @@ async function getCharacterAppearances(characterId) {
       return {
         appearances: [],
         lastAppearanceDate: -1,
-        lastAppearanceRating: 0,
+        highestRating: 0,
         metaTags: []
       };
     }
 
     // Find the most recent valid year and get all appearance details
     let lastAppearanceDate = -1;
-    let lastAppearanceRating = 0;
+    let highestRating = 0;
+    let highestRatingStudios = [];
     const allMetaTags = new Set(); // Use Set to automatically handle duplicates
 
     // Get just the names and collect meta tags
@@ -88,7 +89,9 @@ async function getCharacterAppearances(characterId) {
           
           if (details.year !== null && (lastAppearanceDate === -1 || details.year > lastAppearanceDate)) {
             lastAppearanceDate = details.year;
-            lastAppearanceRating = details.rating;
+          }
+          if (details.rating > highestRating) {
+            highestRating = details.rating;
           }
           // Add meta tags to the set
           details.meta_tags.forEach(tag => allMetaTags.add(tag));
@@ -116,7 +119,7 @@ async function getCharacterAppearances(characterId) {
     return {
       appearances: validAppearances,
       lastAppearanceDate,
-      lastAppearanceRating,
+      highestRating,
       metaTags: Array.from(allMetaTags) // Convert Set back to array
     };
   } catch (error) {
@@ -124,7 +127,7 @@ async function getCharacterAppearances(characterId) {
     return {
       appearances: [],
       lastAppearanceDate: -1,
-      lastAppearanceRating: 0,
+      highestRating: 0,
       metaTags: []
     };
   }
@@ -304,9 +307,9 @@ function generateFeedback(guess, answerCharacter) {
   };
 
   // Handle rating comparison
-  const ratingDiff = guess.lastAppearanceRating - answerCharacter.lastAppearanceRating;
-  const ratingFivePercent = answerCharacter.lastAppearanceRating * 0.02;
-  const ratingTwentyPercent = answerCharacter.lastAppearanceRating * 0.1;
+  const ratingDiff = guess.highestRating - answerCharacter.highestRating;
+  const ratingFivePercent = answerCharacter.highestRating * 0.02;
+  const ratingTwentyPercent = answerCharacter.highestRating * 0.1;
   let ratingFeedback;
   if (Math.abs(ratingDiff) <= ratingFivePercent) {
     ratingFeedback = '=';
@@ -316,7 +319,7 @@ function generateFeedback(guess, answerCharacter) {
     ratingFeedback = ratingDiff >= -ratingTwentyPercent ? '-' : '--';
   }
   result.rating = {
-    guess: guess.lastAppearanceRating,
+    guess: guess.highestRating,
     feedback: ratingFeedback
   };
 
