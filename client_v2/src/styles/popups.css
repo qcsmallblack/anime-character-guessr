@@ -9,6 +9,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .popup-content {
@@ -19,6 +21,9 @@
   max-width: 800px;
   position: relative;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin: auto;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
 }
 
 .popup-close {
@@ -501,4 +506,36 @@
 
 .preset-button:active {
   background-color: #e5e5e5;
+}
+
+@media (max-width: 640px) {
+  .popup-content {
+    padding: 16px;
+    width: 100%;
+    max-height: calc(100vh - 32px);
+  }
+
+  .popup-overlay {
+    padding: 16px;
+  }
+
+  .answer-character {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .answer-character-image {
+    width: 150px;
+    height: 210px;
+  }
+
+  .answer-character-name {
+    font-size: 24px;
+  }
+
+  .answer-character-name-cn {
+    font-size: 16px;
+  }
 } 
