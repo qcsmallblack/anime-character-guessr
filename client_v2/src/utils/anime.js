@@ -25,8 +25,8 @@ async function getSubjectDetails(subjectId) {
     const meta_tags = response.data.meta_tags || [];
     const animationStudio = response.data.infobox?.find(item => item.key === '动画制作')?.value;
     if (animationStudio) {
-      // Split by '×' and trim whitespace from each studio
-      const studios = animationStudio.split('×').map(studio => studio.trim());
+      // Split by both '×' and '/' and trim whitespace from each studio
+      const studios = animationStudio.split(/[×/]/).map(studio => studio.trim()).filter(studio => studio.length < 30);
       meta_tags.push(...studios);
     }
 

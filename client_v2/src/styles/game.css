@@ -66,4 +66,46 @@ html, body, #root {
   .social-links {
     top: -45px;
   }
+}
+
+.game-info-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.hint-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.hint-label {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hint-text {
+  color: #1e293b;
+  font-size: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .hint-container {
+    background: #1e293b;
+  }
+
+  .hint-label {
+    color: #94a3b8;
+  }
+
+  .hint-text {
+    color: #f1f5f9;
+  }
 } 

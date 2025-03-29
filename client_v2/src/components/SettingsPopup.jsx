@@ -141,8 +141,9 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', true);
                     onSettingsChange('characterNum', 3);
-                    onSettingsChange('maxAttempts', 15);
+                    onSettingsChange('maxAttempts', 10);
                     await setIndex("");
+                    onSettingsChange('enableHints', true);
                   }}
                 >
                   入门
@@ -160,6 +161,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
                     onSettingsChange('characterNum', 6);
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("");
+                    onSettingsChange('enableHints', true);
                   }}
                 >
                   冻鳗高手
@@ -177,6 +179,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
                     onSettingsChange('characterNum', 6);
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74077");
+                    onSettingsChange('enableHints', false);
                   }}
                 >
                   木柜子乐队
@@ -464,6 +467,16 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
                   }}
                   min="1"
                   max="20"
+                />
+              </div>
+              <div className="settings-row">
+                <label>启用提示：</label>
+                <input 
+                  type="checkbox"
+                  checked={gameSettings.enableHints}
+                  onChange={(e) => {
+                    onSettingsChange('enableHints', e.target.checked);
+                  }}
                 />
               </div>
             </div>
