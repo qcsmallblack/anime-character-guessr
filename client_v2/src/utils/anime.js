@@ -20,10 +20,20 @@ async function getSubjectDetails(subjectId) {
     }
 
     let year = airDate ? parseInt(airDate.split('-')[0]) : null;
+    
+    // Extract meta tags and add animation studios
+    const meta_tags = response.data.meta_tags || [];
+    const animationStudio = response.data.infobox?.find(item => item.key === '动画制作')?.value;
+    if (animationStudio) {
+      // Split by '×' and trim whitespace from each studio
+      const studios = animationStudio.split('×').map(studio => studio.trim());
+      meta_tags.push(...studios);
+    }
+
     return {
       name: response.data.name_cn || response.data.name,
       year,
-      meta_tags: response.data.meta_tags || [],
+      meta_tags,
       rating: response.data.rating?.score || 0
     };
   } catch (error) {

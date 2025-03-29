@@ -132,34 +132,34 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
               <div className="presets-buttons">
                 <button 
                   className="preset-button"
-                  onClick={() => {
+                  onClick={async () => {
                     onSettingsChange('startYear', new Date().getFullYear()-5);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 20);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('useIndex', false);
-                    onSettingsChange('indexId', null);
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', true);
                     onSettingsChange('characterNum', 3);
                     onSettingsChange('maxAttempts', 15);
+                    await setIndex("");
                   }}
                 >
                   入门
                 </button>
                 <button 
                   className="preset-button"
-                  onClick={() => {
+                  onClick={async () => {
                     onSettingsChange('startYear', new Date().getFullYear()-10);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 50);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('useIndex', false);
-                    onSettingsChange('indexId', null);
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', false);
                     onSettingsChange('characterNum', 6);
                     onSettingsChange('maxAttempts', 10);
+                    await setIndex("");
                   }}
                 >
                   冻鳗高手

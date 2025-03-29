@@ -20,11 +20,18 @@
 }
 
 .guesses-table th {
-  background: #f1f5f9;
-  color: #475569;
+  background: #e2e8f0;
+  color: #1e293b;
   font-weight: 600;
   font-size: 14px;
   text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .guesses-table th {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
 }
 
 .guesses-table td {
