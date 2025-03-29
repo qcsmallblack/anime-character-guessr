@@ -234,11 +234,31 @@
 }
 
 .answer-summary {
-  flex: 1;
-  padding: 16px;
-  background-color: #f8fafc;
-  border-radius: 8px;
-  border: 1px solid #e2e8f0;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.answer-summary::-webkit-scrollbar {
+  width: 6px;
+}
+
+.answer-summary::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.answer-summary::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.answer-summary::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .summary-content {
