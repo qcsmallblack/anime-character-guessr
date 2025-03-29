@@ -1,0 +1,35 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.game-info {
+  margin-bottom: 16px;
+  text-align: right;
+  font-size: 18px;
+  color: #94a3b8;
+}
+
+.restart-button {
+  padding: 8px 24px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background: #646cff;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.restart-button:hover {
+  background: #747bff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container { padding: 16px; }
+} 

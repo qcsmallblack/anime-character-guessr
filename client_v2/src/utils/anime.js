@@ -173,40 +173,84 @@ async function getCharactersBySubjectId(subjectId) {
   }
 }
 
-async function getRandomCharacter() {
+async function getRandomCharacter(gameSettings) {
   try {
-    // Generate random year between 2020-2025
-    const offset = Math.floor(Math.random() * 100);
+    let subject;
+    let total;
+    let randomOffset;
     
-    // Search for anime from that year
-    const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=1&offset=${offset}`, {
-      "sort": "heat",
-      "filter": {
-          "type": [2],
-          "air_date": [
-              `>=2018-01-01`,
-              `<2026-01-01`
-          ]
-      }
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    if (gameSettings.useIndex && gameSettings.indexId) {
+      // Get index info first
+      const indexInfo = await getIndexInfo(gameSettings.indexId);
+      // Get total from index info
+      total = indexInfo.total + gameSettings.addedSubjects.length;
+      
+      // Get a random offset within the total number of subjects
+      randomOffset = Math.floor(Math.random() * total);
 
-    if (!response.data || !response.data.data.length === 0) {
-      throw new Error('No anime found');
+      if (randomOffset >= indexInfo.total) {
+        randomOffset = randomOffset - indexInfo.total;
+        subject = gameSettings.addedSubjects[randomOffset];
+      } else {
+        // Fetch one subject from the index at the random offset
+        const response = await axios.get(
+          `${API_BASE_URL}/v0/indices/${gameSettings.indexId}/subjects?limit=1&offset=${randomOffset}`
+        );
+
+        if (!response.data || !response.data.data || response.data.data.length === 0) {
+          throw new Error('No subjects found in index');
+        }
+
+        subject = response.data.data[0];
+      }
+    } else {
+      gameSettings.useIndex = false;
+      total = gameSettings.topNSubjects+gameSettings.addedSubjects.length;
+      
+      randomOffset = Math.floor(Math.random() * total);
+      const endDate = new Date(`${gameSettings.endYear + 1}-01-01`);
+      const today = new Date();
+      const minDate = new Date(Math.min(endDate.getTime(), today.getTime())).toISOString().split('T')[0];
+      
+      if (randomOffset >= gameSettings.topNSubjects) {
+        randomOffset = randomOffset - gameSettings.topNSubjects;
+        subject = gameSettings.addedSubjects[randomOffset];
+      } else {
+        // Fetch one subject at the random offset
+        const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=1&offset=${randomOffset}`, {
+          "sort": "heat",
+          "filter": {
+            "type": [2],
+            "air_date": [
+              `>=${gameSettings.startYear}-01-01`,
+              `<${minDate}`
+            ],
+            "meta_tags": gameSettings.metaTags.filter(tag => tag !== "")
+          }
+        });
+
+        if (!response.data || !response.data.data || response.data.data.length === 0) {
+          throw new Error('Failed to fetch subject at random offset');
+        }
+
+        subject = response.data.data[0];
+      }
     }
 
-    // Randomly select an anime from the results
-    const selectedAnime = response.data.data[0];
-
-    // Get characters for the selected anime
-    const characters = await getCharactersBySubjectId(selectedAnime.id);
+    // Get characters for the selected subject
+    const characters = await getCharactersBySubjectId(subject.id);
     
-    // Randomly select a character
-    const randomCharacterIndex = Math.floor(Math.random() * characters.length);
-    const selectedCharacter = characters[randomCharacterIndex];
+    // Filter and select characters based on mainCharacterOnly setting
+    const filteredCharacters = gameSettings.mainCharacterOnly
+      ? characters.filter(character => character.relation === '主角')
+      : characters.filter(character => character.relation === '主角' || character.relation === '配角').slice(0, gameSettings.characterNum);
+
+    if (filteredCharacters.length === 0) {
+      throw new Error('No characters found for this anime');
+    }
+
+    // Randomly select one character from the filtered characters
+    const selectedCharacter = filteredCharacters[Math.floor(Math.random() * filteredCharacters.length)];
 
     // Get additional character details
     const characterDetails = await getCharacterDetails(selectedCharacter.id);
@@ -309,8 +353,57 @@ function generateFeedback(guess, answerCharacter) {
   return result;
 }
 
+async function getIndexInfo(indexId) {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/v0/indices/${indexId}`);
+    
+    if (!response.data) {
+      throw new Error('No index information found');
+    }
+
+    return {
+      title: response.data.title,
+      total: response.data.total
+    };
+  } catch (error) {
+    if (error.response?.status === 404) {
+      throw new Error('Index not found');
+    }
+    console.error('Error fetching index information:', error);
+    throw error;
+  }
+}
+
+async function searchSubjects(keyword) {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/v0/search/subjects`, {
+      keyword: keyword.trim(),
+      filter: {
+        type: [2]  // Only anime
+      }
+    });
+
+    if (!response.data || !response.data.data) {
+      return [];
+    }
+
+    return response.data.data.map(subject => ({
+      id: subject.id,
+      name: subject.name,
+      name_cn: subject.name_cn,
+      image: subject.images?.grid || subject.images?.medium || '',
+      date: subject.date
+    }));
+  } catch (error) {
+    console.error('Error searching subjects:', error);
+    return [];
+  }
+}
+
 export {
   getRandomCharacter,
   getCharacterAppearances,
-  generateFeedback
+  generateFeedback,
+  getIndexInfo,
+  searchSubjects
 }; 

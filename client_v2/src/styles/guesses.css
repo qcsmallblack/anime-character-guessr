@@ -1,0 +1,211 @@
+.table-container {
+  border-radius: 12px;
+  background: #f8fafc;
+  overflow-x: auto;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.guesses-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-height: 100px;
+}
+
+.guesses-table th,
+.guesses-table td {
+  padding: 12px 16px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.guesses-table th {
+  background: #f1f5f9;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+}
+
+.guesses-table td {
+  background: #fff;
+  color: #334155;
+  text-align: center;
+}
+
+/* Table column widths */
+.guesses-table th:nth-child(1), .guesses-table td:nth-child(1) { width: 60px; }
+.guesses-table th:nth-child(2), .guesses-table td:nth-child(2) { 
+  width: 350px;
+  text-align: left;
+}
+
+.guesses-table th:nth-child(3), .guesses-table td:nth-child(3) { width: 50px; text-align: right;}
+.guesses-table th:nth-child(4), .guesses-table td:nth-child(4) { width: 50px; }
+.guesses-table th:nth-child(5), .guesses-table td:nth-child(5) { width: 100px; }
+.guesses-table th:nth-child(6), .guesses-table td:nth-child(6) { width: 300px; }
+.guesses-table th:nth-child(7), .guesses-table td:nth-child(7) { 
+  min-width: 200px;
+  max-width: 300px;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Character name display in table */
+.character-name-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.character-name-container.correct {
+  background: #bbf7d0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 4px 8px;
+}
+
+.character-name-container.correct .character-name {
+  color: #14532d;
+}
+
+.character-name-container.correct .character-name-cn {
+  color: #166534;
+}
+
+.character-name {
+  color: #1e293b;
+  font-size: 14px;
+}
+
+.character-name-cn {
+  color: #64748b;
+  font-size: 12px;
+}
+
+/* Appearance display in table */
+.appearance-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.appearance-rating {
+  color: #1e293b;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.appearance-rating.correct {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+.appearance-rating.partial {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+.appearance-year {
+  color: #64748b;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.appearance-year.correct {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+.appearance-year.partial {
+  background: #fef9c3;
+  color: #854d0e;
+}
+
+/* Character icon in table */
+.character-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 6px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Meta tags display */
+.meta-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+}
+
+.meta-tag {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.meta-tag.shared {
+  background: #bbf7d0;
+  color: #14532d;
+}
+
+/* Feedback cells */
+.feedback-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  min-width: 80%;
+  text-align: center;
+  font-weight: 500;
+  background: transparent;
+}
+
+.feedback-cell.correct {
+  background-color: #bbf7d0;
+  color: #14532d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-cell.partial {
+  background-color: #fef9c3;
+  color: #854d0e;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Shared appearances */
+.shared-appearances {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  min-width: 80%;
+  text-align: center;
+  font-weight: 500;
+}
+
+.shared-appearances.has-shared {
+  background: #bbf7d0;
+  color: #14532d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .guesses-table th,
+  .guesses-table td { padding: 8px 12px; }
+} 
