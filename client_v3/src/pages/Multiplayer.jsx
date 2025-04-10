@@ -27,9 +27,9 @@ const Multiplayer = () => {
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [gameSettings, setGameSettings] = useState({
-    startYear: new Date().getFullYear()-10,
+    startYear: new Date().getFullYear()-5,
     endYear: new Date().getFullYear(),
-    topNSubjects: 50,
+    topNSubjects: 20,
     metaTags: ["", "", ""],
     useIndex: false,
     indexId: null,
@@ -89,15 +89,15 @@ const Multiplayer = () => {
     newSocket.on('gameStart', ({ character, settings }) => {
       gameEndedRef.current = false;
       const decryptedCharacter = JSON.parse(CryptoJS.AES.decrypt(character, secret).toString(CryptoJS.enc.Utf8));
-      // console.log('Game started with character:', character);
+      console.log('Game started with character:', decryptedCharacter);
       setAnswerCharacter(decryptedCharacter);
       setGameSettings(settings);
       setGuessesLeft(settings.maxAttempts);
       
       // Prepare hints if enabled
       let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
-      if (settings.enableHints && character.summary) {
-        const sentences = character.summary.split(/[。、，。！？ “”]/).filter(s => s.trim());
+      if (settings.enableHints && decryptedCharacter.summary) {
+        const sentences = decryptedCharacter.summary.split(/[。、，。！？ “”]/).filter(s => s.trim());
         if (sentences.length > 0) {
           const selectedIndices = new Set();
           while (selectedIndices.size < Math.min(2, sentences.length)) {
@@ -233,7 +233,6 @@ const Multiplayer = () => {
 
       const isCorrect = guessData.id === answerCharacter.id;
       setGuessesLeft(prev => prev - 1);
-
       // Send guess result to server
       socket.emit('playerGuess', {
         roomId,
@@ -363,7 +362,7 @@ const Multiplayer = () => {
         // Prepare hints if enabled
         let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
         if (gameSettings.enableHints && character.summary) {
-          const sentences = character.summary.split(/[。、，。！？ ]/).filter(s => s.trim());
+          const sentences = character.summary.split(/[。、，。！？ “”]/).filter(s => s.trim());
           if (sentences.length > 0) {
             const selectedIndices = new Set();
             while (selectedIndices.size < Math.min(2, sentences.length)) {
@@ -523,38 +522,40 @@ const Multiplayer = () => {
               <div className="game-end-message">
                 {winner} <br/>答案是: {answerCharacter.nameCn}
               </div>
-              {!isHost && (
-                <div className="game-settings-display">
-                  <pre>{JSON.stringify(gameSettings, null, 2)}</pre>
-                </div>
-              )}
-              <div className="guess-history-table">
-                <table>
-                  <thead>
-                    <tr>
-                      {guessesHistory.map(playerGuesses => (
-                        <th key={playerGuesses.username}>{playerGuesses.username}</th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Array.from({ length: Math.max(...guessesHistory.map(g => g.guesses.length)) }).map((_, rowIndex) => (
-                      <tr key={rowIndex}>
+              <div className="game-end-container">
+                {!isHost && (
+                  <div className="game-settings-display">
+                    <pre>{JSON.stringify(gameSettings, null, 2)}</pre>
+                  </div>
+                )}
+                <div className="guess-history-table">
+                  <table>
+                    <thead>
+                      <tr>
                         {guessesHistory.map(playerGuesses => (
-                          <td key={playerGuesses.username}>
-                            {playerGuesses.guesses[rowIndex] && (
-                              <>
-                                <img className="character-icon" src={playerGuesses.guesses[rowIndex].icon} alt={playerGuesses.guesses[rowIndex].name} />
-                                <div className="character-name">{playerGuesses.guesses[rowIndex].name}</div>
-                                <div className="character-name-cn">{playerGuesses.guesses[rowIndex].nameCn}</div>
-                              </>
-                            )}
-                          </td>
+                          <th key={playerGuesses.username}>{playerGuesses.username}</th>
                         ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
+                    </thead>
+                    <tbody>
+                      {Array.from({ length: Math.max(...guessesHistory.map(g => g.guesses.length)) }).map((_, rowIndex) => (
+                        <tr key={rowIndex}>
+                          {guessesHistory.map(playerGuesses => (
+                            <td key={playerGuesses.username}>
+                              {playerGuesses.guesses[rowIndex] && (
+                                <>
+                                  <img className="character-icon" src={playerGuesses.guesses[rowIndex].icon} alt={playerGuesses.guesses[rowIndex].name} />
+                                  <div className="character-name">{playerGuesses.guesses[rowIndex].name}</div>
+                                  <div className="character-name-cn">{playerGuesses.guesses[rowIndex].nameCn}</div>
+                                </>
+                              )}
+                            </td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           )}

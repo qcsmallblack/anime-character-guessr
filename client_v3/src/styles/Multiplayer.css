@@ -220,7 +220,7 @@
 
 .game-settings-display {
   margin: 1rem auto;
-  max-width: 600px;
+  max-width: 500px;
   padding: 1rem;
   background-color: #f5f5f5;
   border-radius: 8px;
@@ -295,14 +295,49 @@
   text-align: left;
 }
 
-.guess-history-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  min-height: 100px;
-  margin-top: 1rem;
-  border-radius: 12px;
+.game-end-container {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.game-end-container .game-settings-display {
+  flex: 0 0 300px;
+  margin: 0;
+  position: sticky;
+  top: 2rem;
+}
+
+.game-end-container .guess-history-table {
+  flex: 1;
+  min-width: 0;
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.game-end-container .guess-history-table::-webkit-scrollbar {
+  height: 8px;
+}
+
+.game-end-container .guess-history-table::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.game-end-container .guess-history-table::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.game-end-container .guess-history-table::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.guess-history-table table {
+  width: 100%;
+  min-width: max-content;
 }
 
 .guess-history-table th,

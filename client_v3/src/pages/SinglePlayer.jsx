@@ -226,7 +226,7 @@ function SinglePlayer() {
         let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
         if (gameSettings.enableHints && character.summary) {
           // Split summary into sentences using Chinese punctuation
-          const sentences = character.summary.split(/[。、，。！？]/).filter(s => s.trim());
+          const sentences = character.summary.split(/[。、，。！？ “”]/).filter(s => s.trim());
           if (sentences.length > 0) {
             // Randomly select 2 sentences if available
             const selectedIndices = new Set();
