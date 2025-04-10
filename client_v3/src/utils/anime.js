@@ -69,7 +69,7 @@ async function getCharacterAppearances(characterId) {
       (appearance.staff === '主角' || appearance.staff === '配角')
       && (appearance.type === 2 || appearance.type === 4)
     );
-
+    
     if (filteredAppearances.length === 0) {
       return {
         appearances: [],
