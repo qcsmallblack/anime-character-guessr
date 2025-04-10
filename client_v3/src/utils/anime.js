@@ -30,6 +30,12 @@ async function getSubjectDetails(subjectId) {
       meta_tags.push(...studioSplit);
     }
 
+    const publisher = response.data.infobox?.find(item => item.key === '发行')?.value;
+    if (publisher && publisher.length < 50) {
+      const studioTrim = publisher.split(/[×/()、（）\[\]]/)[0].trim();
+      meta_tags.push(studioTrim);
+    }
+
     return {
       name: response.data.name_cn || response.data.name,
       year,
@@ -60,8 +66,8 @@ async function getCharacterAppearances(characterId) {
 
     // Filter appearances by staff and type
     const filteredAppearances = subjectsResponse.data.filter(appearance => 
-      (appearance.staff === '主角' || appearance.staff === '配角') && 
-      appearance.type === 2
+      (appearance.staff === '主角' || appearance.staff === '配角')
+      // && appearance.type === 2
     );
 
     if (filteredAppearances.length === 0) {
@@ -107,7 +113,8 @@ async function getCharacterAppearances(characterId) {
 
     // Add CV to meta tags if available
     if (personsResponse.data && personsResponse.data.length) {
-      const animeVAs = personsResponse.data.filter(person => person.subject_type === 2);
+      // const animeVAs = personsResponse.data.filter(person => person.subject_type === 2);
+      const animeVAs = personsResponse.data;
       if (animeVAs.length > 0) {
         animeVAs.forEach(person => {
           allMetaTags.add(`${person.name}`);
@@ -195,7 +202,7 @@ async function getRandomCharacter(gameSettings) {
       // Get index info first
       const indexInfo = await getIndexInfo(gameSettings.indexId);
       // Get total from index info
-      total = indexInfo.total + gameSettings.addedSubjects.length;
+      total = indexInfo.total + gameSettings.addedSubjects.length; 
       
       // Get a random offset within the total number of subjects
       randomOffset = Math.floor(Math.random() * total);
@@ -391,7 +398,7 @@ async function searchSubjects(keyword) {
     const response = await axios.post(`${API_BASE_URL}/v0/search/subjects`, {
       keyword: keyword.trim(),
       filter: {
-        type: [2]  // Only anime
+        // type: [2]  // Only anime
       }
     });
 

@@ -184,6 +184,24 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                 >
                   木柜子乐队
                 </button>
+                <button 
+                  className="preset-button"
+                  onClick={async () => {
+                    alert('那很有生活了😅');
+                    onSettingsChange('startYear', new Date().getFullYear()-10);
+                    onSettingsChange('endYear', new Date().getFullYear());
+                    onSettingsChange('topNSubjects', 50);
+                    onSettingsChange('metaTags', ["", "", ""]);
+                    onSettingsChange('addedSubjects', []);
+                    onSettingsChange('mainCharacterOnly', false);
+                    onSettingsChange('characterNum', 10);
+                    onSettingsChange('maxAttempts', 10);
+                    await setIndex("74622");
+                    onSettingsChange('enableHints', true);
+                  }}
+                >
+                  二游高手
+                </button>
               </div>
             </div>
 
