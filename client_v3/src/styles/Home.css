@@ -33,15 +33,11 @@
   text-align: center;
   text-decoration: none;
   color: #2c3e50;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 .mode-button:hover {
-  transform: translateY(-5px);
   background: white;
   border-color: #3498db;
-  box-shadow: 0 8px 15px rgba(52, 152, 219, 0.15);
 }
 
 .mode-button h2 {
