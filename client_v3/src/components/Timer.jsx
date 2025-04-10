@@ -1,35 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const Timer = ({ timeLimit, onTimeUp, isActive, reset }) => {
   const [timeLeft, setTimeLeft] = useState(timeLimit);
+  const endTimeRef = useRef(null);
 
-  // Reset timer when timeLimit changes (game initialization) or reset is true
+  // Initialize or reset end time
   useEffect(() => {
-    if (reset || timeLimit !== timeLeft) {
+    if (reset || !endTimeRef.current || timeLeft !== timeLimit) {
+      const newEndTime = Date.now() + timeLimit * 1000;
+      endTimeRef.current = newEndTime;
       setTimeLeft(timeLimit);
     }
   }, [timeLimit, reset]);
 
-  // Handle countdown
+  // Countdown using actual time difference
   useEffect(() => {
-    let timer;
-    if (isActive && timeLeft > 0) {
-      timer = setInterval(() => {
-        setTimeLeft(prev => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            onTimeUp();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
+    if (!isActive || !endTimeRef.current) return;
 
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [isActive, timeLeft, onTimeUp]);
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const remaining = Math.max(0, Math.floor((endTimeRef.current - now) / 1000));
+      setTimeLeft(remaining);
+
+      if (remaining === 0) {
+        clearInterval(interval);
+        onTimeUp();
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [isActive, onTimeUp]);
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -44,4 +44,4 @@ const Timer = ({ timeLimit, onTimeUp, isActive, reset }) => {
   );
 };
 
-export default Timer; 
+export default Timer;
