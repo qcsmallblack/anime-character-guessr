@@ -97,7 +97,7 @@ const Multiplayer = () => {
       // Prepare hints if enabled
       let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
       if (settings.enableHints && character.summary) {
-        const sentences = character.summary.split(/[。、，。！？]/).filter(s => s.trim());
+        const sentences = character.summary.split(/[。、，。！？ ]/).filter(s => s.trim());
         if (sentences.length > 0) {
           const selectedIndices = new Set();
           while (selectedIndices.size < Math.min(2, sentences.length)) {
@@ -362,7 +362,7 @@ const Multiplayer = () => {
         // Prepare hints if enabled
         let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
         if (gameSettings.enableHints && character.summary) {
-          const sentences = character.summary.split(/[。、，。！？]/).filter(s => s.trim());
+          const sentences = character.summary.split(/[。、，。！？ ]/).filter(s => s.trim());
           if (sentences.length > 0) {
             const selectedIndices = new Set();
             while (selectedIndices.size < Math.min(2, sentences.length)) {
