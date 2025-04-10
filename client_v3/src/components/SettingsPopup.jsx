@@ -418,6 +418,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       >
                         <span className="subject-title">{subject.name}</span>
                         <span className="subject-meta">{subject.name_cn || ''}</span>
+                        <span className="subject-type">{subject.type}</span>
                       </div>
                     ))}
                   </div>
@@ -429,7 +430,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       <div key={subject.id} className="added-subject-item">
                         <div className="subject-info">
                           <span className="subject-title">{subject.name}</span>
-                          <span className="subject-meta">{subject.name_cn || ''}</span>
+                          <span className="subject-meta">{subject.name_cn || ''}（{subject.type}）</span>
                         </div>
                         <button 
                           className="remove-button"
@@ -488,7 +489,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                 />
               </div>
               <div className="settings-row">
-                <label>启用提示：</label>
+                <label>*启用提示：</label>
                 <input 
                   type="checkbox"
                   checked={gameSettings.enableHints}
@@ -499,7 +500,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
               </div>
 
               <div className="settings-row">
-                <label>时间限制：</label>
+                <label>*时间限制：</label>
                 <input
                   type="checkbox"
                   checked={gameSettings.timeLimit !== null}
@@ -520,6 +521,9 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     <label>秒/轮</label>
                   </div>
                 )}
+              </div>
+              <div className="settings-row">
+                <label>（带*的功能可能有bug）</label>
               </div>
               
             </div>

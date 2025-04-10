@@ -435,9 +435,13 @@
   font-weight: 500;
 }
 
-.subject-meta {
-  color: #666;
+.subject-meta, .subject-type {
+  color: #64748b;
   font-size: 0.9em;
+}
+
+.subject-type {
+  margin-left: auto;
 }
 
 .added-subjects {

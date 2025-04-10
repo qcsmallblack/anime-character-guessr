@@ -67,7 +67,7 @@ async function getCharacterAppearances(characterId) {
     // Filter appearances by staff and type
     const filteredAppearances = subjectsResponse.data.filter(appearance => 
       (appearance.staff === '主角' || appearance.staff === '配角')
-      // && appearance.type === 2
+      && (appearance.type === 2 || appearance.type === 4)
     );
 
     if (filteredAppearances.length === 0) {
@@ -113,8 +113,7 @@ async function getCharacterAppearances(characterId) {
 
     // Add CV to meta tags if available
     if (personsResponse.data && personsResponse.data.length) {
-      // const animeVAs = personsResponse.data.filter(person => person.subject_type === 2);
-      const animeVAs = personsResponse.data;
+      const animeVAs = personsResponse.data.filter(person => person.subject_type === 2 || person.subject_type === 4);
       if (animeVAs.length > 0) {
         animeVAs.forEach(person => {
           allMetaTags.add(`${person.name}`);
@@ -399,6 +398,7 @@ async function searchSubjects(keyword) {
       keyword: keyword.trim(),
       filter: {
         // type: [2]  // Only anime
+        type: [2, 4]  // anime and game
       }
     });
 
@@ -411,7 +411,8 @@ async function searchSubjects(keyword) {
       name: subject.name,
       name_cn: subject.name_cn,
       image: subject.images?.grid || subject.images?.medium || '',
-      date: subject.date
+      date: subject.date,
+      type: subject.type==2 ? '动漫' : '游戏'
     }));
   } catch (error) {
     console.error('Error searching subjects:', error);

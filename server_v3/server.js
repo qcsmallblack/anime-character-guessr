@@ -7,7 +7,7 @@ const { startSelfPing } = require('./utils/selfPing');
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
-const secret = "my-secret-key";
+// const secret = "my-secret-key";
 const cors_options = {
     origin: [
         'http://localhost:5173',
@@ -295,14 +295,14 @@ io.on('connection', (socket) => {
 
       // Broadcast winner and answer to all clients
       io.to(roomId).emit('gameEnded', {
-        message: `游戏结束！赢家是: ${winner.username}`,
+        message: `赢家是: ${winner.username}`,
         answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
     } else if (allEnded) {
       // Broadcast game end with answer to all clients
       io.to(roomId).emit('gameEnded', {
-        message: '游戏结束！所有玩家都未猜中',
+        message: '已经结束咧🙄！没人猜中',
         answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
