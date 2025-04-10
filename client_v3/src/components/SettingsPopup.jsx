@@ -2,7 +2,7 @@ import '../styles/popups.css';
 import { getIndexInfo, searchSubjects } from '../utils/anime';
 import { useState, useEffect, useRef } from 'react';
 
-function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
+function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hideRestart = false }) {
   const [indexInputValue, setIndexInputValue] = useState('');
   const [indexInfo, setIndexInfo] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -457,7 +457,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
             <div className="settings-section">
               <h3>游戏设置</h3>
               <div className="settings-row">
-                <label>最大尝试次数：</label>
+                <label>每局次数：</label>
                 <input 
                   type="number"
                   value={gameSettings.maxAttempts || ''}
@@ -465,8 +465,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
                     const value = e.target.value === '' ? 10 : parseInt(e.target.value);
                     onSettingsChange('maxAttempts', value);
                   }}
-                  min="1"
-                  max="20"
+                  min="5"
+                  max="15"
                 />
               </div>
               <div className="settings-row">
@@ -505,13 +505,14 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart }) {
               </div>
               
             </div>
-
-            <div className="settings-actions">
-              <button className="restart-button" onClick={onRestart}>
-                再来一次
-              </button>
-            </div>
           </div>
+        </div>
+        <div className="popup-footer">
+          {!hideRestart && (
+            <button className="restart-button" onClick={onRestart}>
+              重新开始
+            </button>
+          )}
         </div>
       </div>
     </div>

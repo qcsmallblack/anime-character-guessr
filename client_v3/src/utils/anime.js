@@ -76,7 +76,6 @@ async function getCharacterAppearances(characterId) {
     // Find the most recent valid year and get all appearance details
     let lastAppearanceDate = -1;
     let highestRating = 0;
-    let highestRatingStudios = [];
     const allMetaTags = new Set(); // Use Set to automatically handle duplicates
 
     // Get just the names and collect meta tags

@@ -66,7 +66,7 @@
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 10px;
 }
 
 .settings-section {
@@ -84,6 +84,7 @@
   color: #1e293b;
   font-size: 16px;
   font-weight: 600;
+  text-align: left;
 }
 
 .settings-subsection {
@@ -576,3 +577,8 @@
     border-color: #3b82f6;
   }
 } 
+
+.popup-footer {
+  padding-top: 10px;
+}
+

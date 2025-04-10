@@ -9,6 +9,7 @@ import SocialLinks from '../components/SocialLinks';
 import GameInfo from '../components/GameInfo';
 import Timer from '../components/Timer';
 import '../styles/game.css';
+import '../styles/SinglePlayer.css';
 
 function SinglePlayer() {
   const [guesses, setGuesses] = useState([]);
@@ -274,17 +275,19 @@ function SinglePlayer() {
   };
 
   return (
-    <div className="container">
+    <div className="container single-player-container">
       <SocialLinks 
         onSettingsClick={() => setSettingsPopup(true)}
         onHelpClick={() => setHelpPopup(true)}
       />
-
-      <SearchBar 
-        onCharacterSelect={handleCharacterSelect}
-        isGuessing={isGuessing}
-        gameEnd={gameEnd}
-      />
+      
+      <div className="search-bar">
+        <SearchBar 
+          onCharacterSelect={handleCharacterSelect}
+          isGuessing={isGuessing}
+          gameEnd={gameEnd}
+        />
+      </div>
 
       {currentTimeLimit && (
         <Timer
