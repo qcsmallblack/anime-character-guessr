@@ -396,7 +396,7 @@ app.get('/ping', (req, res) => {
   res.status(200).send('Server is active');
 });
 
-// startSelfPing();
+startSelfPing();
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

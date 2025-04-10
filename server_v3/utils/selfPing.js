@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const PING_INTERVAL = 14 * 60 * 1000; // 14 minutes in milliseconds
+const PING_INTERVAL = 14.5 * 60 * 1000; // 14 minutes in milliseconds
 
 const pingServer = () => {
   axios.get(`https://anime-character-guessr.onrender.com/ping`)
