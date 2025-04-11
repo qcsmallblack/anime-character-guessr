@@ -129,7 +129,6 @@ async function getCharacterAppearances(characterId) {
       .filter(appearance => appearance !== null)
       .sort((a, b) => b.rating_count - a.rating_count)
       .map(appearance => appearance.name);
-    console.log(validAppearances);
     // Create a new Set with the meta tags from highest rating_count appearance
     const allMetaTags = new Set(highestRatingCountMetaTags);
 
