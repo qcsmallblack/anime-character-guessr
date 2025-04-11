@@ -114,16 +114,22 @@ async function getCharacterAppearances(characterId) {
             highestRatingCount = details.rating_count;
             highestRatingCountMetaTags = details.meta_tags;
           }
-          return details.name;
+          return {
+            name: details.name,
+            rating_count: details.rating_count
+          };
         } catch (error) {
           console.error(`Failed to get details for subject ${appearance.id}:`, error);
           return null;
         }
       })
     );
-
-    const validAppearances = appearances.filter(appearance => appearance !== null).sort((a, b) => b.rating_count - a.rating_count);
-
+    
+    const validAppearances = appearances
+      .filter(appearance => appearance !== null)
+      .sort((a, b) => b.rating_count - a.rating_count)
+      .map(appearance => appearance.name);
+    console.log(validAppearances);
     // Create a new Set with the meta tags from highest rating_count appearance
     const allMetaTags = new Set(highestRatingCountMetaTags);
 
@@ -344,10 +350,7 @@ function generateFeedback(guess, answerCharacter) {
     feedback: ratingFeedback
   };
 
-  // Handle shared appearances
-  const sharedAppearances = guess.appearances.filter(appearance => 
-    answerCharacter.appearances.includes(appearance)
-  );
+  const sharedAppearances = guess.appearances.filter(appearance => answerCharacter.appearances.includes(appearance));
   result.shared_appearances = {
     first: sharedAppearances[0] || '',
     count: sharedAppearances.length
