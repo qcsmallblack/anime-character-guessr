@@ -10,6 +10,7 @@ import GameInfo from '../components/GameInfo';
 import Timer from '../components/Timer';
 import '../styles/game.css';
 import '../styles/SinglePlayer.css';
+import axios from 'axios';
 
 function SinglePlayer() {
   const [guesses, setGuesses] = useState([]);
@@ -55,6 +56,10 @@ function SinglePlayer() {
   // Initialize game
   useEffect(() => {
     let isMounted = true;
+    
+    axios.get('https://anime-character-guessr.onrender.com/').then(response => {
+      console.log(response.data);
+    });
 
     const initializeGame = async () => {
       try {

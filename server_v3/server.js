@@ -406,5 +406,5 @@ server.listen(PORT, () => {
 
 app.get('/', (req, res) => {
     visitCount++;
-    res.send(`Hello from the server! Connection count: ${visitCount}`);
+    res.send(`Hello from the server! Visitor count: ${visitCount}`);
   });
