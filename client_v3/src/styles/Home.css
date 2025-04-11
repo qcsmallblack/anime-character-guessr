@@ -50,4 +50,10 @@
   font-size: 1rem;
   color: #7f8c8d;
   line-height: 1.5;
+}
+
+.mode-button small {
+  color: #7f8c8d;
+  display: block;
+  margin-top: 0.5rem;
 } 

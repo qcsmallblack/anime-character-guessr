@@ -13,8 +13,7 @@ import '../styles/game.css';
 import CryptoJS from 'crypto-js';
 
 const secret = "my-secret-key";
-const SOCKET_URL = 'https://anime-character-guessr.onrender.com';
-// const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL;
 
 const Multiplayer = () => {
   const navigate = useNavigate();

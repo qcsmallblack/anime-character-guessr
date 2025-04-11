@@ -407,7 +407,6 @@ app.get('/', (req, res) => {
   res.send(`Hello from the server! Visitor count: ${visitCount}`);
 });
 
-app.get('/rooms', (req, res) => {
-  const rooms = Array.from(rooms.values());
-  res.json(rooms);
+app.get('/room-count', (req, res) => {
+  res.json({ count: rooms.size });
 });

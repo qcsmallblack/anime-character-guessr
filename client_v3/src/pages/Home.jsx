@@ -1,15 +1,28 @@
 import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import '../styles/Home.css';
 
 const Home = () => {
+  const [roomCount, setRoomCount] = useState(0);
+
+  useEffect(() => {
+    const serverUrl = import.meta.env.VITE_SERVER_URL;
+    fetch(`${serverUrl}/room-count`)
+      .then(response => response.json())
+      .then(data => setRoomCount(data.count))
+      .catch(error => console.error('Error fetching room count:', error));
+  }, []);
+
   return (
     <div className="home-container">
       <div className="game-modes">
         <Link to="/singleplayer" className="mode-button">
           <h2>单人</h2>
+          <small>至少不会卡😅</small>
         </Link>
         <Link to="/multiplayer" className="mode-button">
           <h2>多人</h2>
+          <small>当前房间数: {roomCount}</small>
         </Link>
       </div>
       <div className="home-footer">
