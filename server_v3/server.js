@@ -281,8 +281,8 @@ io.on('connection', (socket) => {
     // Update player's guesses string
     player.guesses += result === 'win' ? '✌' : '💀';
 
-    // Check if all players have ended their game
-    const allEnded = room.players.every(p => p.guesses.includes('✌') || p.guesses.includes('💀'));
+    // Check if all players have ended their game or disconnected
+    const allEnded = room.players.every(p => p.guesses.includes('✌') || p.guesses.includes('💀') || p.disconnected);
     const winner = room.players.find(p => p.guesses.includes('✌'));
 
     if (winner) {
