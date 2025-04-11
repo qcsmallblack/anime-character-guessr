@@ -201,7 +201,6 @@ io.on('connection', (socket) => {
 
     // Store current game state in room data
     room.currentGame = {
-      character,
       settings,
       startTime: Date.now(),
       guesses: [] // Initialize guesses as an array of objects
@@ -292,7 +291,6 @@ io.on('connection', (socket) => {
       // Broadcast winner and answer to all clients
       io.to(roomId).emit('gameEnded', {
         message: `赢家是: ${winner.username}`,
-        answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
 
@@ -302,7 +300,6 @@ io.on('connection', (socket) => {
       // Broadcast game end with answer to all clients
       io.to(roomId).emit('gameEnded', {
         message: '已经结束咧🙄！没人猜中',
-        answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
 

@@ -121,10 +121,8 @@ const Multiplayer = () => {
     });
 
     // Listen for game end event
-    newSocket.on('gameEnded', ({ message, answer, guesses }) => {
+    newSocket.on('gameEnded', ({ message, guesses }) => {
       setWinner(message);
-      const decryptedAnswer = JSON.parse(CryptoJS.AES.decrypt(answer, secret).toString(CryptoJS.enc.Utf8));
-      setAnswerCharacter(decryptedAnswer);
       setGlobalGameEnd(true);
       setGuessesHistory(guesses);
       setIsGameStarted(false);
