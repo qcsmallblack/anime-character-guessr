@@ -21,26 +21,36 @@ async function getSubjectDetails(subjectId) {
 
     let year = airDate ? parseInt(airDate.split('-')[0]) : null;
     
-    // Extract meta tags and add animation studios
-    const meta_tags = response.data.meta_tags || [];
-    const animationStudio = response.data.infobox?.find(item => item.key === '动画制作')?.value;
-    if (animationStudio && animationStudio.length < 50) {
-      // Split by both '×' and '/' and trim whitespace from each studio
-      const studioSplit = animationStudio.split(/[×/()、（）\[\]]/).map(studio => studio.trim()).filter(studio => studio.length < 30 && studio.length > 0);
-      meta_tags.push(...studioSplit);
-    }
+    // // Extract meta tags and add animation studios
+    // const meta_tags = response.data.meta_tags || [];
+    // const animationStudio = response.data.infobox?.find(item => item.key === '动画制作')?.value;
+    // if (animationStudio && animationStudio.length < 50) {
+    //   // Split by both '×' and '/' and trim whitespace from each studio
+    //   const studioSplit = animationStudio.split(/[×/()、（）\[\]]/).map(studio => studio.trim()).filter(studio => studio.length < 30 && studio.length > 0);
+    //   meta_tags.push(...studioSplit);
+    // }
 
-    const publisher = response.data.infobox?.find(item => item.key === '发行')?.value;
-    if (publisher && publisher.length < 50) {
-      const studioTrim = publisher.split(/[×/()、（）\[\]]/)[0].trim();
-      meta_tags.push(studioTrim);
+    // const publisher = response.data.infobox?.find(item => item.key === '发行')?.value;
+    // if (publisher && publisher.length < 50) {
+    //   const studioTrim = publisher.split(/[×/()、（）\[\]]/)[0].trim();
+    //   meta_tags.push(studioTrim);
+    // }
+
+    const meta_tags = new Set();
+    response.data.meta_tags.filter(tag => !tag.includes('20')).forEach(tag => meta_tags.add(tag));
+    if (response.data.type === 2) {
+      response.data.tags.slice(0, 10).filter(tag => !tag.name.includes('20')).forEach(tag => meta_tags.add(tag.name));
+    }
+    if (response.data.type === 4) {
+      response.data.tags.slice(0, 5).filter(tag => !tag.name.includes('20')).forEach(tag => meta_tags.add(tag.name));
     }
 
     return {
       name: response.data.name_cn || response.data.name,
       year,
-      meta_tags,
-      rating: response.data.rating?.score || 0
+      meta_tags: Array.from(meta_tags),
+      rating: response.data.rating?.score || 0,
+      rating_count: response.data.rating?.total || 0
     };
   } catch (error) {
     console.error('Error fetching subject details:', error);
@@ -82,7 +92,8 @@ async function getCharacterAppearances(characterId) {
     // Find the most recent valid year and get all appearance details
     let lastAppearanceDate = -1;
     let highestRating = 0;
-    const allMetaTags = new Set(); // Use Set to automatically handle duplicates
+    let highestRatingCount = 0;
+    let highestRatingCountMetaTags = [];
 
     // Get just the names and collect meta tags
     const appearances = await Promise.all(
@@ -98,8 +109,11 @@ async function getCharacterAppearances(characterId) {
           if (details.rating > highestRating) {
             highestRating = details.rating;
           }
-          // Add meta tags to the set
-          details.meta_tags.forEach(tag => allMetaTags.add(tag));
+          // Update meta tags only if this has the highest rating_count
+          if (details.rating_count > highestRatingCount) {
+            highestRatingCount = details.rating_count;
+            highestRatingCountMetaTags = details.meta_tags;
+          }
           return details.name;
         } catch (error) {
           console.error(`Failed to get details for subject ${appearance.id}:`, error);
@@ -108,10 +122,12 @@ async function getCharacterAppearances(characterId) {
       })
     );
 
-    // Filter out null values (unaired shows) from appearances
-    const validAppearances = appearances.filter(appearance => appearance !== null);
+    const validAppearances = appearances.filter(appearance => appearance !== null).sort((a, b) => b.rating_count - a.rating_count);
 
-    // Add CV to meta tags if available
+    // Create a new Set with the meta tags from highest rating_count appearance
+    const allMetaTags = new Set(highestRatingCountMetaTags);
+
+    // Add CV to meta tags if available (preserving original VA logic)
     if (personsResponse.data && personsResponse.data.length) {
       const animeVAs = personsResponse.data.filter(person => person.subject_type === 2 || person.subject_type === 4);
       if (animeVAs.length > 0) {
@@ -125,7 +141,7 @@ async function getCharacterAppearances(characterId) {
       appearances: validAppearances,
       lastAppearanceDate,
       highestRating,
-      metaTags: Array.from(allMetaTags) // Convert Set back to array
+      metaTags: Array.from(allMetaTags)
     };
   } catch (error) {
     console.error('Error fetching character appearances:', error);
