@@ -214,14 +214,10 @@ io.on('connection', (socket) => {
       room.currentGame.guesses.push({ username: p.username, guesses: [] });
     });
 
-    // Broadcast game start to all clients in the room
+    // Broadcast game start and updated players to all clients in the room in a single event
     io.to(roomId).emit('gameStart', { 
       character,
-      settings
-    });
-
-    // Broadcast updated players to all clients in the room
-    io.to(roomId).emit('updatePlayers', {
+      settings,
       players: room.players
     });
     
@@ -299,6 +295,9 @@ io.on('connection', (socket) => {
         answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
+
+      // Reset ready status only when game globally ends
+      io.to(roomId).emit('resetReadyStatus');
     } else if (allEnded) {
       // Broadcast game end with answer to all clients
       io.to(roomId).emit('gameEnded', {
@@ -306,6 +305,9 @@ io.on('connection', (socket) => {
         answer: room.currentGame.character,
         guesses: room.currentGame.guesses // Include guesses history
       });
+
+      // Reset ready status only when game globally ends
+      io.to(roomId).emit('resetReadyStatus');
     }
 
     // Broadcast updated players to all clients in the room
@@ -314,9 +316,6 @@ io.on('connection', (socket) => {
     });
     
     console.log(`Player ${player.username} ended their game in room ${roomId} with result: ${result}`);
-
-    // Broadcast reset ready status to all clients in the room
-    io.to(roomId).emit('resetReadyStatus');
   });
 
   // Handle game settings request

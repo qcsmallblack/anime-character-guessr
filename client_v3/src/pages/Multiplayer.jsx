@@ -87,13 +87,16 @@ const Multiplayer = () => {
       setGameSettings(settings);
     });
 
-    newSocket.on('gameStart', ({ character, settings }) => {
+    newSocket.on('gameStart', ({ character, settings, players }) => {
       gameEndedRef.current = false;
       const decryptedCharacter = JSON.parse(CryptoJS.AES.decrypt(character, secret).toString(CryptoJS.enc.Utf8));
       console.log('Game started with character:', decryptedCharacter);
       setAnswerCharacter(decryptedCharacter);
       setGameSettings(settings);
       setGuessesLeft(settings.maxAttempts);
+      if (players) {
+        setPlayers(players);
+      }
       
       // Prepare hints if enabled
       let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
