@@ -39,19 +39,9 @@ function SinglePlayer() {
     characterNum: 6,
     maxAttempts: 10,
     enableHints: true,
+    includeGame: false,
     timeLimit: null
   });
-
-  const getGenderEmoji = (gender) => {
-    switch (gender) {
-      case 'male':
-        return '♂️';
-      case 'female':
-        return '♀️';
-      default:
-        return '❓';
-    }
-  };
 
   // Initialize game
   useEffect(() => {
@@ -110,13 +100,14 @@ function SinglePlayer() {
     setShouldResetTimer(true);
     
     try {
-      const appearances = await getCharacterAppearances(character.id);
+      const appearances = await getCharacterAppearances(character.id, gameSettings);
       
       const guessData = {
         ...character,
         ...appearances
       };
-
+      console.log(guessData);
+      console.log(answerCharacter);
       const isCorrect = guessData.id === answerCharacter.id;
       setGuessesLeft(prev => prev - 1);
 
@@ -127,10 +118,14 @@ function SinglePlayer() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: 'yes',
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: '=',
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: '=',
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: '=',
           highestRating: guessData.highestRating,
           ratingFeedback: '=',
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: '=',
           popularity: guessData.popularity,
           popularityFeedback: '=',
           sharedAppearances: {
@@ -155,10 +150,14 @@ function SinglePlayer() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: feedback.latestAppearance.feedback,
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: feedback.earliestAppearance.feedback,
           highestRating: guessData.highestRating,
           ratingFeedback: feedback.rating.feedback,
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: feedback.appearancesCount.feedback,
           popularity: guessData.popularity,
           popularityFeedback: feedback.popularity.feedback,
           sharedAppearances: feedback.shared_appearances,
@@ -180,10 +179,14 @@ function SinglePlayer() {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: feedback.latestAppearance.feedback,
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: feedback.earliestAppearance.feedback,
           highestRating: guessData.highestRating,
           ratingFeedback: feedback.rating.feedback,
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: feedback.appearancesCount.feedback,
           popularity: guessData.popularity,
           popularityFeedback: feedback.popularity.feedback,
           sharedAppearances: feedback.shared_appearances,
@@ -313,7 +316,6 @@ function SinglePlayer() {
 
       <GuessesTable 
         guesses={guesses}
-        getGenderEmoji={getGenderEmoji}
       />
 
       {settingsPopup && (

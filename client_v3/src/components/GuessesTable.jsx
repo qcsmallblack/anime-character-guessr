@@ -1,6 +1,17 @@
 import '../styles/guesses.css';
 
-function GuessesTable({ guesses, getGenderEmoji }) {
+function GuessesTable({ guesses }) {
+  const getGenderEmoji = (gender) => {
+    switch (gender) {
+      case 'male':
+        return '♂️';
+      case 'female':
+        return '♀️';
+      default:
+        return '❓';
+    }
+  };
+
   return (
     <div className="table-container">
       <table className="guesses-table">
@@ -10,7 +21,8 @@ function GuessesTable({ guesses, getGenderEmoji }) {
             <th>名字</th>
             <th>性别</th>
             <th>人气</th>
-            <th>BGM最高分<br/>最后登场</th>
+            <th>作品数<br/>最高分</th>
+            <th>最早登场<br/>最晚登场</th>
             <th>作品标签</th>
             <th>共同出演</th>
           </tr>
@@ -39,11 +51,21 @@ function GuessesTable({ guesses, getGenderEmoji }) {
               </td>
               <td>
                 <div className="appearance-container">
-                  <div className={`appearance-rating ${guess.ratingFeedback === '=' ? 'correct' : (guess.ratingFeedback === '+' || guess.ratingFeedback === '-') ? 'partial' : ''}`}>
-                    {guess.highestRating}{(guess.ratingFeedback === '+' || guess.ratingFeedback === '++') ? ' ↓' : (guess.ratingFeedback === '-' || guess.ratingFeedback === '--') ? ' ↑' : ''}
+                  <div className={`feedback-cell appearance-count ${guess.appearancesCountFeedback === '=' ? 'correct' : (guess.appearancesCountFeedback === '+' || guess.appearancesCountFeedback === '-') ? 'partial' : guess.appearancesCountFeedback === '?' ? 'unknown' : ''}`}>
+                    {guess.appearancesCount}{(guess.appearancesCountFeedback === '+' || guess.appearancesCountFeedback === '++') ? ' ↓' : (guess.appearancesCountFeedback === '-' || guess.appearancesCountFeedback === '--') ? ' ↑' : ''}
                   </div>
-                  <div className={`appearance-year ${guess.lastAppearanceFeedback === '=' ? 'correct' : (guess.lastAppearanceFeedback === '+' || guess.lastAppearanceFeedback === '-') ? 'partial' : ''}`}>
-                    {guess.lastAppearance}{(guess.lastAppearanceFeedback === '+' || guess.lastAppearanceFeedback === '++') ? ' ↓' : (guess.lastAppearanceFeedback === '-' || guess.lastAppearanceFeedback === '--') ? ' ↑' : ''}
+                  <div className={`feedback-cell appearance-rating ${guess.ratingFeedback === '=' ? 'correct' : (guess.ratingFeedback === '+' || guess.ratingFeedback === '-') ? 'partial' : guess.ratingFeedback === '?' ? 'unknown' : ''}`}>
+                    {guess.highestRating === -1 ? '无' : guess.highestRating}{(guess.ratingFeedback === '+' || guess.ratingFeedback === '++') ? ' ↓' : (guess.ratingFeedback === '-' || guess.ratingFeedback === '--') ? ' ↑' : ''}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div className="appearance-container">
+                  <div className={`feedback-cell earliestAppearance ${guess.earliestAppearanceFeedback === '=' ? 'correct' : (guess.earliestAppearanceFeedback === '+' || guess.earliestAppearanceFeedback === '-') ? 'partial' : guess.earliestAppearanceFeedback === '?' ? 'unknown' : ''}`}>
+                    {guess.earliestAppearance === -1 ? '无' : guess.earliestAppearance}{(guess.earliestAppearanceFeedback === '+' || guess.earliestAppearanceFeedback === '++') ? ' ↓' : (guess.earliestAppearanceFeedback === '-' || guess.earliestAppearanceFeedback === '--') ? ' ↑' : ''}
+                  </div>
+                  <div className={`feedback-cell latestAppearance ${guess.latestAppearanceFeedback === '=' ? 'correct' : (guess.latestAppearanceFeedback === '+' || guess.latestAppearanceFeedback === '-') ? 'partial' : guess.latestAppearanceFeedback === '?' ? 'unknown' : ''}`}>
+                    {guess.latestAppearance === -1 ? '无' : guess.latestAppearance}{(guess.latestAppearanceFeedback === '+' || guess.latestAppearanceFeedback === '++') ? ' ↓' : (guess.latestAppearanceFeedback === '-' || guess.latestAppearanceFeedback === '--') ? ' ↑' : ''}
                   </div>
                 </div>
               </td>

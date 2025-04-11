@@ -58,7 +58,7 @@ async function getSubjectDetails(subjectId) {
   }
 }
 
-async function getCharacterAppearances(characterId) {
+async function getCharacterAppearances(characterId, gameSettings) {
   try {
     const [subjectsResponse, personsResponse] = await Promise.all([
       axios.get(`${API_BASE_URL}/v0/characters/${characterId}/subjects`),
@@ -68,31 +68,40 @@ async function getCharacterAppearances(characterId) {
     if (!subjectsResponse.data || !subjectsResponse.data.length) {
       return {
         appearances: [],
-        lastAppearanceDate: -1,
+        latestAppearance: -1,
+        earliestAppearance: -1,
         highestRating: 0,
         metaTags: []
       };
     }
 
-    // Filter appearances by staff and type
-    const filteredAppearances = subjectsResponse.data.filter(appearance => 
-      (appearance.staff === '主角' || appearance.staff === '配角')
-      && (appearance.type === 2 || appearance.type === 4)
-    );
+    let filteredAppearances;
+    if (gameSettings.includeGame) {
+      filteredAppearances = subjectsResponse.data.filter(appearance => 
+        (appearance.staff === '主角' || appearance.staff === '配角')
+        && (appearance.type === 2 || appearance.type === 4)
+      );
+    } else {
+      filteredAppearances = subjectsResponse.data.filter(appearance => 
+        (appearance.staff === '主角' || appearance.staff === '配角')
+        && (appearance.type === 2)
+      );
+    }
     
     if (filteredAppearances.length === 0) {
       return {
         appearances: [],
-        lastAppearanceDate: -1,
-        highestRating: 0,
+        latestAppearance: -1,
+        earliestAppearance: -1,
+        highestRating: -1,
         metaTags: []
       };
     }
 
-    // Find the most recent valid year and get all appearance details
-    let lastAppearanceDate = -1;
-    let highestRating = 0;
-    let highestRatingCount = 0;
+    let latestAppearance = -1;
+    let earliestAppearance = -1;
+    let highestRating = -1;
+    let highestRatingCount = -1;
     let highestRatingCountMetaTags = [];
 
     // Get just the names and collect meta tags
@@ -100,11 +109,17 @@ async function getCharacterAppearances(characterId) {
       filteredAppearances.map(async appearance => {
         try {
           const details = await getSubjectDetails(appearance.id);
-          // Skip if details is null (unaired show)
-          if (!details) return null;
           
-          if (details.year !== null && (lastAppearanceDate === -1 || details.year > lastAppearanceDate)) {
-            lastAppearanceDate = details.year;
+          if (!details || details.year === null) return null;
+
+          const allMetaTags = new Set(details.meta_tags);
+          if (!gameSettings.metaTags.filter(tag => tag !== '').every(tag => allMetaTags.has(tag))) return null;
+          
+          if (latestAppearance === -1 || details.year > latestAppearance) {
+            latestAppearance = details.year;
+          }
+          if (earliestAppearance === -1 || details.year < earliestAppearance) {
+            earliestAppearance = details.year;
           }
           if (details.rating > highestRating) {
             highestRating = details.rating;
@@ -144,7 +159,8 @@ async function getCharacterAppearances(characterId) {
 
     return {
       appearances: validAppearances,
-      lastAppearanceDate,
+      latestAppearance,
+      earliestAppearance,
       highestRating,
       metaTags: Array.from(allMetaTags)
     };
@@ -152,8 +168,9 @@ async function getCharacterAppearances(characterId) {
     console.error('Error fetching character appearances:', error);
     return {
       appearances: [],
-      lastAppearanceDate: -1,
-      highestRating: 0,
+      latestAppearance: -1,
+      earliestAppearance: -1,
+      highestRating: -1,
       metaTags: []
     };
   }
@@ -295,7 +312,7 @@ async function getRandomCharacter(gameSettings) {
     const characterDetails = await getCharacterDetails(selectedCharacter.id);
 
     // Get character appearances
-    const appearances = await getCharacterAppearances(selectedCharacter.id);
+    const appearances = await getCharacterAppearances(selectedCharacter.id, gameSettings);
 
     return {
       ...selectedCharacter,
@@ -337,7 +354,9 @@ function generateFeedback(guess, answerCharacter) {
   const ratingFivePercent = answerCharacter.highestRating * 0.02;
   const ratingTwentyPercent = answerCharacter.highestRating * 0.1;
   let ratingFeedback;
-  if (Math.abs(ratingDiff) <= ratingFivePercent) {
+  if (guess.highestRating === -1 || answerCharacter.highestRating === -1) {
+    ratingFeedback = '?';
+  } else if (Math.abs(ratingDiff) <= ratingFivePercent) {
     ratingFeedback = '=';
   } else if (ratingDiff > 0) {
     ratingFeedback = ratingDiff <= ratingTwentyPercent ? '+' : '++';
@@ -355,7 +374,22 @@ function generateFeedback(guess, answerCharacter) {
     count: sharedAppearances.length
   };
 
-  // Handle meta tags
+  // Compare total number of appearances
+  const appearanceDiff = guess.appearances.length - answerCharacter.appearances.length;
+  const twentyPercentAppearances = answerCharacter.appearances.length * 0.2;
+  let appearancesFeedback;
+  if (appearanceDiff === 0) {
+    appearancesFeedback = '=';
+  } else if (appearanceDiff > 0) {
+    appearancesFeedback = appearanceDiff <= twentyPercentAppearances ? '+' : '++';
+  } else {
+    appearancesFeedback = appearanceDiff >= -twentyPercentAppearances ? '-' : '--';
+  }
+  result.appearancesCount = {
+    guess: guess.appearances.length,
+    feedback: appearancesFeedback
+  };
+
   const sharedMetaTags = guess.metaTags.filter(tag => 
     answerCharacter.metaTags.includes(tag)
   );
@@ -364,14 +398,13 @@ function generateFeedback(guess, answerCharacter) {
     shared: sharedMetaTags
   };
 
-  // Handle last appearance date comparison
-  if (guess.lastAppearanceDate === -1 || answerCharacter.lastAppearanceDate === -1) {
-    result.lastAppearanceDate = {
-      guess: guess.lastAppearanceDate === -1 ? '?' : guess.lastAppearanceDate,
-      feedback: guess.lastAppearanceDate === -1 && answerCharacter.lastAppearanceDate === -1 ? '=' : '?'
+  if (guess.latestAppearance === -1 || answerCharacter.latestAppearance === -1) {
+    result.latestAppearance = {
+      guess: guess.latestAppearance === -1 ? '?' : guess.latestAppearance,
+      feedback: guess.latestAppearance === -1 && answerCharacter.latestAppearance === -1 ? '=' : '?'
     };
   } else {
-    const yearDiff = guess.lastAppearanceDate - answerCharacter.lastAppearanceDate;
+    const yearDiff = guess.latestAppearance - answerCharacter.latestAppearance;
     let yearFeedback;
     if (yearDiff === 0) {
       yearFeedback = '=';
@@ -380,8 +413,29 @@ function generateFeedback(guess, answerCharacter) {
     } else {
       yearFeedback = yearDiff >= -1 ? '-' : '--';
     }
-    result.lastAppearanceDate = {
-      guess: guess.lastAppearanceDate,
+    result.latestAppearance = {
+      guess: guess.latestAppearance,
+      feedback: yearFeedback
+    };
+  }
+
+  if (guess.earliestAppearance === -1 || answerCharacter.earliestAppearance === -1) {
+    result.earliestAppearance = {
+      guess: guess.earliestAppearance,
+      feedback: guess.earliestAppearance === -1 && answerCharacter.earliestAppearance === -1 ? '=' : '?'
+    };
+  } else {
+    const yearDiff = guess.earliestAppearance - answerCharacter.earliestAppearance;
+    let yearFeedback;
+    if (yearDiff === 0) {
+      yearFeedback = '=';
+    } else if (yearDiff > 0) {
+      yearFeedback = yearDiff <= 1 ? '+' : '++';
+    } else {
+      yearFeedback = yearDiff >= -1 ? '-' : '--';
+    }
+    result.earliestAppearance = {
+      guess: guess.earliestAppearance,
       feedback: yearFeedback
     };
   }

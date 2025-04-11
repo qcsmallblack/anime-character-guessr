@@ -144,6 +144,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("");
                     onSettingsChange('enableHints', true);
+                    onSettingsChange('includeGame', false);
                   }}
                 >
                   入门
@@ -162,9 +163,28 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("");
                     onSettingsChange('enableHints', true);
+                    onSettingsChange('includeGame', false);
                   }}
                 >
                   冻鳗高手
+                </button>
+                <button 
+                  className="preset-button"
+                  onClick={async () => {
+                    onSettingsChange('startYear', 2005);
+                    onSettingsChange('endYear', new Date().getFullYear());
+                    onSettingsChange('topNSubjects', 75);
+                    onSettingsChange('metaTags', ["", "", ""]);
+                    onSettingsChange('addedSubjects', []);
+                    onSettingsChange('mainCharacterOnly', true);
+                    onSettingsChange('characterNum', 10);
+                    onSettingsChange('maxAttempts', 7);
+                    await setIndex("");
+                    onSettingsChange('enableHints', true);
+                    onSettingsChange('includeGame', false);
+                  }}
+                >
+                  瓶子严选
                 </button>
                 <button 
                   className="preset-button"
@@ -180,6 +200,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74077");
                     onSettingsChange('enableHints', false);
+                    onSettingsChange('includeGame', false);
                   }}
                 >
                   木柜子乐队
@@ -198,10 +219,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74622");
                     onSettingsChange('enableHints', true);
+                    onSettingsChange('includeGame', false);
                   }}
                 >
                   二游高手
                 </button>
+                
               </div>
             </div>
 
@@ -209,6 +232,24 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
               <h3>范围设置</h3>
               
               <div className="settings-subsection">
+                <div className="settings-row">
+                  <label>关联游戏条目：</label>
+                  <input 
+                    type="checkbox"
+                    checked={gameSettings.includeGame}
+                    onChange={(e) => {
+                      onSettingsChange('includeGame', e.target.checked);
+                    }}
+                  />
+                  <span className="tooltip-trigger">
+                    ?
+                    <span className="tooltip-text">
+                      计算登场作品（年份、分数）时会包括游戏。<br/>
+                      但是，答案角色还是只会从动画中选取，因为游戏的热度榜有bug。<br/>
+                      如果想要猜游戏角色，可以自创一个目录或者添加额外作品。
+                    </span>
+                  </span>
+                </div>
                 <div className="settings-row">
                   <label>时间：</label>
                   <input 
@@ -247,7 +288,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                         newMetaTags[0] = value;
                         onSettingsChange('metaTags', newMetaTags);
                       }}
-                      disabled={gameSettings.useIndex}
+                      // disabled={gameSettings.useIndex}
                     >
                       <option value="">全部</option>
                       <option value="TV">TV</option>
@@ -269,7 +310,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                         newMetaTags[1] = value;
                         onSettingsChange('metaTags', newMetaTags);
                       }}
-                      disabled={gameSettings.useIndex}
+                      // disabled={gameSettings.useIndex}
                     >
                       <option value="">全部</option>
                       <option value="原创">原创</option>
@@ -289,7 +330,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                         newMetaTags[2] = value;
                         onSettingsChange('metaTags', newMetaTags);
                       }}
-                      disabled={gameSettings.useIndex}
+                      // disabled={gameSettings.useIndex}
                     >
                       <option value="">全部</option>
                       <option value="科幻">科幻</option>
@@ -321,6 +362,14 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       <option value="职场">职场</option>
                     </select>
                   </div>
+                  <span className="tooltip-trigger">
+                    ?
+                    <span className="tooltip-text">
+                      这行选项同时会影响登场作品的信息<br/>
+                      比如不想让剧场版计入登场数据，可以只勾选“TV”。<br/>
+                      当“使用目录”生效时，这行选项不会影响正确答案的抽取，只会影响表格内显示的信息。
+                    </span>
+                  </span>
                 </div>
                 <div className="settings-row">
                   <label>热度排行榜前</label>
@@ -370,6 +419,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       </div>
                     </>
                   )}
+                  <span className="tooltip-trigger">
+                    ?
+                    <span className="tooltip-text">
+                      勾选时，正确答案只会从目录（+额外作品）中抽取。
+                    </span>
+                  </span>
                 </div>
                 {gameSettings.useIndex && indexInfo && (
                   <div className="settings-row index-info">

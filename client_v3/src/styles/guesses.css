@@ -25,6 +25,11 @@
   font-weight: 600;
   font-size: 14px;
   text-align: center;
+  white-space: nowrap;
+}
+
+.guesses-table th br {
+  margin: 4px 0;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -41,24 +46,19 @@
 }
 
 /* Table column widths */
-.guesses-table th:nth-child(1), .guesses-table td:nth-child(1) { width: 60px; }
+.guesses-table th:nth-child(1), .guesses-table td:nth-child(1) { width: 60px; } /* Icon */
 .guesses-table th:nth-child(2), .guesses-table td:nth-child(2) { 
-  width: 350px;
+  width: 200px;
   text-align: left;
-}
+} /* Name */
+.guesses-table th:nth-child(3), .guesses-table td:nth-child(3) { width: 60px; } /* Gender */
+.guesses-table th:nth-child(4), .guesses-table td:nth-child(4) { width: 80px; } /* Popularity */
+.guesses-table th:nth-child(5), .guesses-table td:nth-child(5) { width: 80px; } /* BGM Works/Score */
+.guesses-table th:nth-child(6), .guesses-table td:nth-child(6) { width: 80px; } /* First/Last Appearance */
+.guesses-table th:nth-child(7), .guesses-table td:nth-child(7) { width: 250px; } /* Work Tags */
+.guesses-table th:nth-child(8), .guesses-table td:nth-child(8) { width: 300px; } /* Co-appearances */
 
-.guesses-table th:nth-child(3), .guesses-table td:nth-child(3) { width: 50px; text-align: right;}
-.guesses-table th:nth-child(4), .guesses-table td:nth-child(4) { width: 50px; }
-.guesses-table th:nth-child(5), .guesses-table td:nth-child(5) { width: 100px; }
-.guesses-table th:nth-child(6), .guesses-table td:nth-child(6) { width: 300px; }
-.guesses-table th:nth-child(7), .guesses-table td:nth-child(7) { 
-  min-width: 200px;
-  max-width: 300px;
-  white-space: normal;
-  word-wrap: break-word;
-}
-
-/* Character name display in table */
+/* Character name display */
 .character-name-container {
   display: flex;
   flex-direction: column;
@@ -85,6 +85,7 @@
 .character-name {
   color: #1e293b;
   font-size: 14px;
+  font-weight: 500;
 }
 
 .character-name-cn {
@@ -92,51 +93,7 @@
   font-size: 12px;
 }
 
-/* Appearance display in table */
-.appearance-container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.appearance-rating {
-  color: #1e293b;
-  font-size: 14px;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.appearance-rating.correct {
-  background: #bbf7d0;
-  color: #14532d;
-}
-
-.appearance-rating.partial {
-  background: #fef9c3;
-  color: #854d0e;
-}
-
-.appearance-year {
-  color: #64748b;
-  font-size: 12px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.appearance-year.correct {
-  background: #bbf7d0;
-  color: #14532d;
-}
-
-.appearance-year.partial {
-  background: #fef9c3;
-  color: #854d0e;
-}
-
-/* Character icon in table */
+/* Character icon */
 .character-icon {
   width: 50px;
   height: 50px;
@@ -146,12 +103,51 @@
   margin: 0 auto;
 }
 
+/* Feedback cells */
+.feedback-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1px auto;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+  min-width: 80%;
+  text-align: center;
+  font-weight: 500;
+  background: transparent;
+}
+
+.feedback-cell.correct {
+  background-color: #bbf7d0;
+  color: #14532d;
+}
+
+.feedback-cell.partial {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.feedback-cell.unknown {
+  background-color: #f1f5f9;
+  color: #64748b;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    #e2e8f0 4px,
+    #e2e8f0 8px
+  );
+  opacity: 0.9;
+}
+
 /* Meta tags display */
 .meta-tags-container {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
   justify-content: center;
+  padding: 4px;
 }
 
 .meta-tag {
@@ -168,36 +164,10 @@
   color: #14532d;
 }
 
-/* Feedback cells */
-.feedback-cell {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: all 0.2s;
-  min-width: 80%;
-  text-align: center;
-  font-weight: 500;
-  background: transparent;
-}
-
-.feedback-cell.correct {
-  background-color: #bbf7d0;
-  color: #14532d;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.feedback-cell.partial {
-  background-color: #fef9c3;
-  color: #854d0e;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
 /* Shared appearances */
 .shared-appearances {
   display: inline-block;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 6px;
   transition: all 0.2s;
   min-width: 80%;
@@ -211,8 +181,43 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive styles */
+@media (max-width: 1024px) {
   .guesses-table th,
-  .guesses-table td { padding: 8px 12px; }
+  .guesses-table td {
+    padding: 8px 12px;
+  }
+  
+  .meta-tags-container {
+    padding: 2px;
+  }
+  
+  .meta-tag {
+    font-size: 11px;
+    padding: 2px 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table-container {
+    border-radius: 8px;
+  }
+  
+  .guesses-table th,
+  .guesses-table td {
+    padding: 6px 8px;
+  }
+  
+  .character-name {
+    font-size: 13px;
+  }
+  
+  .character-name-cn {
+    font-size: 11px;
+  }
+  
+  .feedback-cell {
+    padding: 4px 8px;
+    font-size: 13px;
+  }
 } 

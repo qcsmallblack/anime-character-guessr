@@ -97,4 +97,10 @@
 
 .social-link:hover .bangumi-icon {
   transform: scale(1.1);
+}
+
+.bilibili-icon {
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
 } 

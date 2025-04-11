@@ -14,6 +14,7 @@ import CryptoJS from 'crypto-js';
 
 const secret = "my-secret-key";
 const SOCKET_URL = 'https://anime-character-guessr.onrender.com';
+// const SOCKET_URL = 'http://localhost:3000';
 
 const Multiplayer = () => {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const Multiplayer = () => {
     characterNum: 6,
     maxAttempts: 10,
     enableHints: true,
+    includeGame: false,
     timeLimit: 60
   });
 
@@ -224,7 +226,7 @@ const Multiplayer = () => {
     setShouldResetTimer(true);
     
     try {
-      const appearances = await getCharacterAppearances(character.id);
+      const appearances = await getCharacterAppearances(character.id, gameSettings);
       
       const guessData = {
         ...character,
@@ -251,10 +253,14 @@ const Multiplayer = () => {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: 'yes',
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: '=',
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: '=',
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: '=',
           highestRating: guessData.highestRating,
           ratingFeedback: '=',
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: '=',
           popularity: guessData.popularity,
           popularityFeedback: '=',
           sharedAppearances: {
@@ -275,10 +281,14 @@ const Multiplayer = () => {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: feedback.latestAppearance.feedback,
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: feedback.earliestAppearance.feedback,
           highestRating: guessData.highestRating,
           ratingFeedback: feedback.rating.feedback,
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: feedback.appearancesCount.feedback,
           popularity: guessData.popularity,
           popularityFeedback: feedback.popularity.feedback,
           sharedAppearances: feedback.shared_appearances,
@@ -296,10 +306,14 @@ const Multiplayer = () => {
           nameCn: guessData.nameCn,
           gender: guessData.gender,
           genderFeedback: feedback.gender.feedback,
-          lastAppearance: guessData.lastAppearanceDate,
-          lastAppearanceFeedback: feedback.lastAppearanceDate.feedback,
+          latestAppearance: guessData.latestAppearance,
+          latestAppearanceFeedback: feedback.latestAppearance.feedback,
+          earliestAppearance: guessData.earliestAppearance,
+          earliestAppearanceFeedback: feedback.earliestAppearance.feedback,
           highestRating: guessData.highestRating,
           ratingFeedback: feedback.rating.feedback,
+          appearancesCount: guessData.appearances.length,
+          appearancesCountFeedback: feedback.appearancesCount.feedback,
           popularity: guessData.popularity,
           popularityFeedback: feedback.popularity.feedback,
           sharedAppearances: feedback.shared_appearances,
@@ -412,6 +426,7 @@ const Multiplayer = () => {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className="username-input"
+            maxLength={20}
           />
           <button onClick={handleJoinRoom} className="join-button">
             {isHost ? '创建' : '加入'}

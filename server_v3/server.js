@@ -43,13 +43,11 @@ io.on('connection', (socket) => {
       return;
     }
     
-    // Although the host is the first player, ensure room doesn't somehow exist
     if (rooms.has(roomId)) {
         socket.emit('error', { message: 'Room already exists unexpectedly' });
         return;
     }
 
-    // Create new room with host
     rooms.set(roomId, {
       host: socket.id,
       players: [{
@@ -401,10 +399,15 @@ app.get('/ping', (req, res) => {
 startSelfPing();
 
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
+  console.log(`Server is running on port ${PORT}`);
+});
 
 app.get('/', (req, res) => {
-    visitCount++;
-    res.send(`Hello from the server! Visitor count: ${visitCount}`);
-  });
+  visitCount++;
+  res.send(`Hello from the server! Visitor count: ${visitCount}`);
+});
+
+app.get('/rooms', (req, res) => {
+  const rooms = Array.from(rooms.values());
+  res.json(rooms);
+});
