@@ -218,7 +218,7 @@ async function getCharactersBySubjectId(subjectId) {
     }
 
     const filteredCharacters = response.data.filter(character => 
-      character.relation === '主角'
+      character.relation === '主角' || character.relation === '配角'
     );
 
     if (filteredCharacters.length === 0) {
