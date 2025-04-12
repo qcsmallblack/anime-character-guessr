@@ -90,7 +90,6 @@ const Multiplayer = () => {
     newSocket.on('gameStart', ({ character, settings, players }) => {
       gameEndedRef.current = false;
       const decryptedCharacter = JSON.parse(CryptoJS.AES.decrypt(character, secret).toString(CryptoJS.enc.Utf8));
-      console.log('Game started with character:', decryptedCharacter);
       setAnswerCharacter(decryptedCharacter);
       setGameSettings(settings);
       setGuessesLeft(settings.maxAttempts);
