@@ -219,7 +219,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74622");
                     onSettingsChange('enableHints', true);
-                    onSettingsChange('includeGame', false);
+                    onSettingsChange('includeGame', true);
                   }}
                 >
                   二游高手
