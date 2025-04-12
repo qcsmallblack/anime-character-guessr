@@ -86,6 +86,12 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // Check if game is in progress
+    if (room.currentGame) {
+      socket.emit('error', { message: '游戏正在进行中，无法加入' });
+      return;
+    }
+
     // Check for duplicate username (case-insensitive)
     const isUsernameTaken = room.players.some(
       player => player.username.toLowerCase() === username.toLowerCase()
@@ -199,6 +205,9 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // Remove disconnected players with 0 score
+    room.players = room.players.filter(p => !p.disconnected || p.score > 0);
+
     // Store current game state in room data
     room.currentGame = {
       settings,
@@ -296,6 +305,9 @@ io.on('connection', (socket) => {
 
       // Reset ready status only when game globally ends
       io.to(roomId).emit('resetReadyStatus');
+
+      // Clear current game state
+      room.currentGame = null;
     } else if (allEnded) {
       // Broadcast game end with answer to all clients
       io.to(roomId).emit('gameEnded', {
@@ -305,6 +317,9 @@ io.on('connection', (socket) => {
 
       // Reset ready status only when game globally ends
       io.to(roomId).emit('resetReadyStatus');
+
+      // Clear current game state
+      room.currentGame = null;
     }
 
     // Broadcast updated players to all clients in the room
