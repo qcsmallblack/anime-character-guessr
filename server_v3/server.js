@@ -380,8 +380,6 @@ io.on('connection', (socket) => {
       
       if (playerIndex !== -1) {
         const disconnectedPlayer = room.players[playerIndex];
-
-        disconnectedPlayer.disconnected = true; // Record disconnection status
         
         if (room.host === socket.id) {
           rooms.delete(roomId);
@@ -389,11 +387,17 @@ io.on('connection', (socket) => {
           io.to(roomId).emit('roomClosed', { message: 'Host disconnected' });
           console.log(`Host ${disconnectedPlayer.username} disconnected. Room ${roomId} closed and disbanded.`);
         } else {
-          // Otherwise just update player list for remaining players
+          // Remove player if score is 0, otherwise mark as disconnected
+          if (disconnectedPlayer.score === 0) {
+            room.players.splice(playerIndex, 1);
+          } else {
+            disconnectedPlayer.disconnected = true;
+          }
+          // Update player list for remaining players
           io.to(roomId).emit('updatePlayers', {
             players: room.players
           });
-          console.log(`Player ${disconnectedPlayer.username} disconnected from room ${roomId}.`);
+          console.log(`Player ${disconnectedPlayer.username} ${disconnectedPlayer.score === 0 ? 'removed from' : 'disconnected from'} room ${roomId}.`);
         }
         break; // Exit loop once player is found and handled
       }

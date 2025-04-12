@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const PlayerList = ({ players, socket, isGameStarted, handleReadyToggle }) => {
+  const [showNames, setShowNames] = useState(true);
+
   return (
     <div className="players-list">
       <table className="score-table">
         <thead>
           <tr>
             <th></th>
-            <th>名</th>
+            <th>
+              <button 
+                onClick={() => setShowNames(!showNames)} 
+                style={{ 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer',
+                  padding: '0',
+                  margin: '0',
+                  height: 'auto',
+                  lineHeight: '1',
+                  fontSize: 'inherit',
+                  outline: 'none'
+                }}
+              >
+                {showNames ? '名' : '无名'}
+              </button>
+            </th>
             <th>分</th>
             <th>猜</th>
           </tr>
@@ -29,7 +48,15 @@ const PlayerList = ({ players, socket, isGameStarted, handleReadyToggle }) => {
                   player.ready ? '已准备' : '未准备'
                 )}
               </td>
-              <td>{player.username}</td>
+              <td>
+                <span style={{
+                  backgroundColor: !showNames && player.id !== socket?.id ? '#000' : 'transparent',
+                  color: !showNames && player.id !== socket?.id ? '#000' : 'inherit',
+                  padding: !showNames && player.id !== socket?.id ? '2px 4px' : '0'
+                }}>
+                  {player.username}
+                </span>
+              </td>
               <td>{player.score}</td>
               <td>{player.guesses || ''}</td>
             </tr>

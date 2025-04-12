@@ -458,19 +458,24 @@ const Multiplayer = () => {
               )}
               {isHost && (
                 <div className="host-game-controls">
-                  <button 
-                    onClick={() => setShowSettings(true)} 
-                    className="settings-button"
-                  >
-                    设置
-                  </button>
-                  <button 
-                    onClick={handleStartGame}
-                    className="start-game-button" 
-                    disabled={players.length < 2 || players.some(p => !p.isHost && !p.ready && !p.disconnected)}
-                  >
-                    开始
-                  </button>
+                  <div className="button-group">
+                    <button 
+                      onClick={() => setShowSettings(true)} 
+                      className="settings-button"
+                    >
+                      设置
+                    </button>
+                    <button 
+                      onClick={handleStartGame}
+                      className="start-game-button" 
+                      disabled={players.length < 2 || players.some(p => !p.isHost && !p.ready && !p.disconnected)}
+                    >
+                      开始
+                    </button>
+                  </div>
+                  <div className="anonymous-mode-info">
+                    匿名模式？点表头"名"切换。
+                  </div>
                 </div>
               )}
               {!isHost && (
