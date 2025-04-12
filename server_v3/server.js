@@ -291,7 +291,7 @@ io.on('connection', (socket) => {
       // Broadcast winner and answer to all clients
       io.to(roomId).emit('gameEnded', {
         message: `赢家是: ${winner.username}`,
-        guesses: room.currentGame.guesses // Include guesses history
+        guesses: room.currentGame?.guesses || [] // Safely handle undefined case
       });
 
       // Reset ready status only when game globally ends
@@ -300,7 +300,7 @@ io.on('connection', (socket) => {
       // Broadcast game end with answer to all clients
       io.to(roomId).emit('gameEnded', {
         message: '已经结束咧🙄！没人猜中',
-        guesses: room.currentGame.guesses // Include guesses history
+        guesses: room.currentGame?.guesses || [] // Safely handle undefined case
       });
 
       // Reset ready status only when game globally ends

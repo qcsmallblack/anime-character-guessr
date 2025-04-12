@@ -43,6 +43,9 @@ function SearchBar({ onCharacterSelect, isGuessing, gameEnd }) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       if (searchQuery.trim()) {
+        setOffset(0);
+        setHasMore(true);
+        setIsInitialSearch(true);
         handleSearch(true);
       } else {
         setSearchResults([]);
@@ -58,8 +61,9 @@ function SearchBar({ onCharacterSelect, isGuessing, gameEnd }) {
   const handleSearch = async (reset = false) => {
     if (!searchQuery.trim()) return;
     
-    const currentLimit = isInitialSearch ? INITIAL_LIMIT : MORE_LIMIT;
-    const currentOffset = isInitialSearch ? 0 : INITIAL_LIMIT + (offset - INITIAL_LIMIT);
+    // Always use initial search parameters when reset is true
+    const currentLimit = reset ? INITIAL_LIMIT : MORE_LIMIT;
+    const currentOffset = reset ? 0 : offset;
     const loadingState = reset ? setIsSearching : setIsLoadingMore;
     
     loadingState(true);
