@@ -1,6 +1,9 @@
 import '../styles/guesses.css';
+import { useState } from 'react';
 
 function GuessesTable({ guesses }) {
+  const [clickedExpandTags, setClickedExpandTags] = useState(new Set());
+
   const getGenderEmoji = (gender) => {
     switch (gender) {
       case 'male':
@@ -10,6 +13,15 @@ function GuessesTable({ guesses }) {
       default:
         return '❓';
     }
+  };
+
+  const handleExpandTagClick = (guessIndex, tagIndex) => {
+    const key = `${guessIndex}-${tagIndex}`;
+    setClickedExpandTags(prev => {
+      const newSet = new Set(prev);
+      newSet.add(key);
+      return newSet;
+    });
   };
 
   return (
@@ -28,8 +40,8 @@ function GuessesTable({ guesses }) {
           </tr>
         </thead>
         <tbody>
-          {guesses.map((guess, index) => (
-            <tr key={index}>
+          {guesses.map((guess, guessIndex) => (
+            <tr key={guessIndex}>
               <td>
                 <img src={guess.icon} alt="character" className="character-icon" />
               </td>
@@ -71,14 +83,22 @@ function GuessesTable({ guesses }) {
               </td>
               <td>
                 <div className="meta-tags-container">
-                  {guess.metaTags.map((tag, tagIndex) => (
-                    <span 
-                      key={tagIndex}
-                      className={`meta-tag ${guess.sharedMetaTags.includes(tag) ? 'shared' : ''}`}
-                    >
-                      {tag}
-                    </span>
-                  ))}
+                  {guess.metaTags.map((tag, tagIndex) => {
+                    const isExpandTag = tag === '展开';
+                    const tagKey = `${guessIndex}-${tagIndex}`;
+                    const isClicked = clickedExpandTags.has(tagKey);
+                    
+                    return (
+                      <span 
+                        key={tagIndex}
+                        className={`meta-tag ${guess.sharedMetaTags.includes(tag) ? 'shared' : ''} ${isExpandTag ? 'expand-tag' : ''}`}
+                        onClick={isExpandTag ? () => handleExpandTagClick(guessIndex, tagIndex) : undefined}
+                        style={isExpandTag && !isClicked ? { color: '#0084B4', cursor: 'pointer' } : undefined}
+                      >
+                        {tag}
+                      </span>
+                    );
+                  })}
                 </div>
               </td>
               <td>

@@ -98,7 +98,10 @@ function SinglePlayer() {
     
     setIsGuessing(true);
     setShouldResetTimer(true);
-    
+    if (character.id === 56822 || character.id === 56823) {
+      alert('有点意思');
+    }
+
     try {
       const appearances = await getCharacterAppearances(character.id, gameSettings);
       

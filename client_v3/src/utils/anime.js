@@ -147,8 +147,11 @@ async function getCharacterAppearances(characterId, gameSettings) {
     // Create a new Set with the meta tags from highest rating_count appearance
     const allMetaTags = new Set(highestRatingCountMetaTags);
 
-    // Add CV to meta tags if available (preserving original VA logic)
-    if (personsResponse.data && personsResponse.data.length) {
+    if (characterId === 56822 || characterId === 56823) {
+      personsResponse.data = [];
+      allMetaTags.add('展开');
+    } 
+    else if (personsResponse.data && personsResponse.data.length) {
       const animeVAs = personsResponse.data.filter(person => person.subject_type === 2 || person.subject_type === 4);
       if (animeVAs.length > 0) {
         animeVAs.forEach(person => {
