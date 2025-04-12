@@ -132,6 +132,17 @@
   text-align: left;
 }
 
+.search-result-item.load-more {
+  justify-content: center;
+  color: #646cff;
+  font-weight: 500;
+  background-color: #f8f8f8;
+}
+
+.search-result-item.load-more:hover {
+  background-color: #f0f0f0;
+}
+
 /* Scrollbar styling for the dropdown */
 .search-dropdown::-webkit-scrollbar {
   width: 8px;
