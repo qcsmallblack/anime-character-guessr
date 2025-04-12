@@ -33,6 +33,9 @@ const Home = () => {
           灵感来源<a href="https://blast.tv/counter-strikle">BLAST.tv</a>,
           数据来源<a href="https://bgm.tv/">Bangumi</a>。
         </p>
+        <p>
+          作者：不好意思，代码里调用的上游API挂了，所以暂时不能玩了。我在想办法了，大伙早点休息。
+        </p>
       </div>
     </div>
   );
