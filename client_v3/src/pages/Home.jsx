@@ -30,9 +30,9 @@ const Home = () => {
           一个猜动漫角色的游戏,
           建议使用桌面端浏览器游玩。
           <br/>
-          <a href="https://space.bilibili.com/87983557">作者</a>
           灵感来源<a href="https://blast.tv/counter-strikle">BLAST.tv</a>,
-          数据来源<a href="https://bgm.tv/">Bangumi</a>。
+          数据来源<a href="https://bgm.tv/">Bangumi</a>。<br/>
+          <a href="https://space.bilibili.com/87983557">作者</a>：“API修好了。感恩Bangumi！”
         </p>
         {/* <p>
           <a href="https://space.bilibili.com/87983557">作者</a>：实在对不起了大家，详情见……没有详情了，代码里调用的上游API挂了，所以暂时不能玩了。大伙早点休息吧。
