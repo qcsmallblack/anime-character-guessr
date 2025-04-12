@@ -16,14 +16,14 @@ const Home = () => {
   return (
     <div className="home-container">
       <div className="game-modes">
-        <Link to="/singleplayer" className="mode-button">
+        {/* <Link to="/singleplayer" className="mode-button">
           <h2>单人</h2>
           <small>至少不会卡😅</small>
         </Link>
         <Link to="/multiplayer" className="mode-button">
           <h2>多人</h2>
           <small>当前房间数: {roomCount}</small>
-        </Link>
+        </Link> */}
       </div>
       <div className="home-footer">
         <p>
