@@ -147,7 +147,7 @@ async function getCharacterAppearances(characterId, gameSettings) {
     // Create a new Set with the meta tags from highest rating_count appearance
     const allMetaTags = new Set(highestRatingCountMetaTags);
 
-    if (characterId === 56822 || characterId === 56823) {
+    if (characterId === 56822 || characterId === 56823 || characterId === 17529) {
       personsResponse.data = [];
       allMetaTags.add('展开');
     } 
