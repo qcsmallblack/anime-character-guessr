@@ -366,8 +366,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     ?
                     <span className="tooltip-text">
                       这行选项同时会影响登场作品的信息<br/>
-                      比如不想让剧场版计入登场数据，可以只勾选“TV”。<br/>
-                      当“使用目录”生效时，这行选项不会影响正确答案的抽取，只会影响表格内显示的信息。
+                      比如不想让剧场版计入登场数据，可以只勾选"TV"。<br/>
+                      当"使用目录"生效时，这行选项不会影响正确答案的抽取，只会影响表格内显示的信息。
                     </span>
                   </span>
                 </div>
@@ -375,12 +375,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   <label>热度排行榜前</label>
                   <input 
                     type="number" 
-                    value={gameSettings.topNSubjects || ''}
+                    value={gameSettings.topNSubjects === undefined ? '' : gameSettings.topNSubjects}
                     onChange={(e) => {
-                      const value = e.target.value === '' ? 100 : parseInt(e.target.value);
+                      const value = e.target.value === '' ? 100 : Math.max(0, parseInt(e.target.value));
                       onSettingsChange('topNSubjects', value);
                     }}
-                    min="1"
+                    min="0"
                     max="1000"
                     disabled={gameSettings.useIndex}
                   />
