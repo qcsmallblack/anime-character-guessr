@@ -18,7 +18,7 @@ const Home = () => {
       <div className="game-modes">
         <Link to="/singleplayer" className="mode-button">
           <h2>单人</h2>
-          <small>至少不会卡😅</small>
+          <small>并非不会卡😅</small>
         </Link>
         <Link to="/multiplayer" className="mode-button">
           <h2>多人</h2>
