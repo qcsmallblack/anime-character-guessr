@@ -59,6 +59,7 @@ const Multiplayer = () => {
   const [winner, setWinner] = useState(null);
   const [globalGameEnd, setGlobalGameEnd] = useState(false);
   const [guessesHistory, setGuessesHistory] = useState([]);
+  const [showNames, setShowNames] = useState(true);
 
   useEffect(() => {
     // Initialize socket connection
@@ -439,6 +440,7 @@ const Multiplayer = () => {
             socket={socket}
             isGameStarted={isGameStarted} 
             handleReadyToggle={handleReadyToggle}
+            onAnonymousModeChange={setShowNames}
           />
 
           {!isGameStarted && !globalGameEnd && (
@@ -539,7 +541,7 @@ const Multiplayer = () => {
                 </div>
               )}
               <div className="game-end-message">
-                {winner} <br/>答案是: {answerCharacter.nameCn}
+                {showNames ? <>{winner}<br /></> : ''} 答案是: {answerCharacter.nameCn}
               </div>
               <div className="game-end-container">
                 {!isHost && (
@@ -551,8 +553,10 @@ const Multiplayer = () => {
                   <table>
                     <thead>
                       <tr>
-                        {guessesHistory.map(playerGuesses => (
-                          <th key={playerGuesses.username}>{playerGuesses.username}</th>
+                        {guessesHistory.map((playerGuesses, index) => (
+                          <th key={playerGuesses.username}>
+                            {showNames ? playerGuesses.username : `玩家${index + 1}`}
+                          </th>
                         ))}
                       </tr>
                     </thead>

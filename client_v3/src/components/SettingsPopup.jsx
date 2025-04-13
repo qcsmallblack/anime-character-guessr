@@ -586,9 +586,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
         </div>
         <div className="popup-footer">
           {!hideRestart && (
-            <button className="restart-button" onClick={onRestart}>
-              重新开始
-            </button>
+            <>
+              <button className="restart-button" onClick={onRestart} style={{ marginRight: '10px' }}>
+                重新开始
+              </button>
+              <label style={{ fontSize: '0.8rem' }}>*设置改动点了才会生效！否则下一把生效</label>
+            </>
           )}
         </div>
       </div>
