@@ -145,6 +145,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("");
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
+                    onSettingsChange('subjectSearch', true);
                   }}
                 >
                   入门
@@ -164,6 +165,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("");
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
+                    onSettingsChange('subjectSearch', true);
                   }}
                 >
                   冻鳗高手
@@ -182,6 +184,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("");
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
+                    onSettingsChange('subjectSearch', true);
                   }}
                 >
                   瓶子严选
@@ -201,6 +204,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("74077");
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
+                    onSettingsChange('subjectSearch', false);
                   }}
                 >
                   木柜子乐队
@@ -220,6 +224,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("74622");
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', true);
+                    onSettingsChange('subjectSearch', false);
                   }}
                 >
                   二游高手
@@ -541,6 +546,16 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   }}
                   min="5"
                   max="15"
+                />
+              </div>
+              <div className="settings-row">
+                <label>条目搜索：</label>
+                <input 
+                  type="checkbox"
+                  checked={gameSettings.subjectSearch}
+                  onChange={(e) => {
+                    onSettingsChange('subjectSearch', e.target.checked);
+                  }}
                 />
               </div>
               <div className="settings-row">
