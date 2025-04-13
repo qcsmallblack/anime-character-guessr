@@ -37,12 +37,17 @@ io.on('connection', (socket) => {
   socket.on('createRoom', ({ roomId, username }) => {
     // Basic validation
     if (!username || username.trim().length === 0) {
-      socket.emit('error', { message: 'Username cannot be empty' });
+      socket.emit('error', { message: '用户名呢' });
       return;
     }
     
     if (rooms.has(roomId)) {
-        socket.emit('error', { message: 'Room already exists unexpectedly' });
+        socket.emit('error', { message: '房间已存在？但为什么？' });
+        return;
+    }
+
+    if (rooms.size >= 259) {
+        socket.emit('error', { message: '服务器已满，请稍后再试' });
         return;
     }
 
@@ -73,7 +78,7 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ roomId, username }) => {
     // Basic validation
     if (!username || username.trim().length === 0) {
-        socket.emit('error', { message: 'Username cannot be empty' });
+        socket.emit('error', { message: '用户名呢' });
         return;
     }
 
@@ -96,7 +101,7 @@ io.on('connection', (socket) => {
     );
 
     if (isUsernameTaken) {
-      socket.emit('error', { message: 'Username is already taken in this room' });
+      socket.emit('error', { message: '换个名字吧' });
       return;
     }
 
