@@ -411,9 +411,9 @@ function generateFeedback(guess, answerCharacter) {
     if (yearDiff === 0) {
       yearFeedback = '=';
     } else if (yearDiff > 0) {
-      yearFeedback = yearDiff <= 1 ? '+' : '++';
+      yearFeedback = yearDiff <= 2 ? '+' : '++';
     } else {
-      yearFeedback = yearDiff >= -1 ? '-' : '--';
+      yearFeedback = yearDiff >= -2 ? '-' : '--';
     }
     result.latestAppearance = {
       guess: guess.latestAppearance,
