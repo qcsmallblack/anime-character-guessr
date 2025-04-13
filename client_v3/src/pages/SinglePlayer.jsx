@@ -109,8 +109,7 @@ function SinglePlayer() {
         ...character,
         ...appearances
       };
-      console.log(guessData);
-      console.log(answerCharacter);
+      
       const isCorrect = guessData.id === answerCharacter.id;
       setGuessesLeft(prev => prev - 1);
 

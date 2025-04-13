@@ -147,7 +147,7 @@ async function getCharacterAppearances(characterId, gameSettings) {
     // Create a new Set with the meta tags from highest rating_count appearance
     const allMetaTags = new Set(highestRatingCountMetaTags);
 
-    if (characterId === 56822 || characterId === 56823 || characterId === 17529) {
+    if (characterId === 56822 || characterId === 56823 || characterId === 17529 || characterId === 10956) {
       personsResponse.data = [];
       allMetaTags.add('展开');
     } 
@@ -224,7 +224,7 @@ async function getCharactersBySubjectId(subjectId) {
     if (filteredCharacters.length === 0) {
       throw new Error('No main or supporting characters found for this anime');
     }
-
+  
     return filteredCharacters;
   } catch (error) {
     console.error('Error fetching characters:', error);
@@ -498,6 +498,8 @@ async function searchSubjects(keyword) {
 export {
   getRandomCharacter,
   getCharacterAppearances,
+  getCharactersBySubjectId,
+  getCharacterDetails,
   generateFeedback,
   getIndexInfo,
   searchSubjects
