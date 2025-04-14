@@ -11,6 +11,7 @@ import PlayerList from '../components/PlayerList';
 import '../styles/Multiplayer.css';
 import '../styles/game.css';
 import CryptoJS from 'crypto-js';
+import { useLocalStorage } from 'usehooks-ts';
 
 const secret = "my-secret-key";
 const SOCKET_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
@@ -27,7 +28,7 @@ const Multiplayer = () => {
   const [error, setError] = useState('');
   const [showSettings, setShowSettings] = useState(false);
   const [isPublic, setIsPublic] = useState(true);
-  const [gameSettings, setGameSettings] = useState({
+  const [gameSettings, setGameSettings, removeGameSettings] = useLocalStorage('multiplayer-game-settings', {
     startYear: new Date().getFullYear()-5,
     endYear: new Date().getFullYear(),
     topNSubjects: 20,
