@@ -448,7 +448,6 @@ const Multiplayer = () => {
             {isHost ? '创建' : '加入'}
           </button>
           {error && <p className="error-message">{error}</p>}
-          <div>如果一直初始化错误请不要重复尝试！</div>
         </div>
       ) : (
         <>

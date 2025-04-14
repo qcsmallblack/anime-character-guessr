@@ -32,12 +32,9 @@ const Home = () => {
           <br/>
           灵感来源<a href="https://blast.tv/counter-strikle">BLAST.tv</a>,
           数据来源<a href="https://bgm.tv/">Bangumi</a>。<br/>
-          <a href="https://space.bilibili.com/87983557">作者</a>：“感恩Bangumi。为了减少服务器负担，请大家错峰游玩。”<br/>
-          如果一直初始化错误请不要重复尝试……就是被限流了。
+          <a href="https://space.bilibili.com/87983557">作者</a>：“实在对不起了大家，详情见……没有详情了，由于我制作网站时缺乏考虑，给bangumi带来了很大的负担。<br/>
+          他们的管理员也很头大，所以我会暂时关闭网站，直到完成优化方案。感谢大家这段时间的热情和支持。”
         </p>
-        {/* <p>
-          <a href="https://space.bilibili.com/87983557">作者</a>：实在对不起了大家，详情见……没有详情了，代码里调用的上游API挂了，所以暂时不能玩了。大伙早点休息吧。
-        </p> */}
       </div>
     </div>
   );

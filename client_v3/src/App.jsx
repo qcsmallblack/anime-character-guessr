@@ -8,9 +8,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/singleplayer" element={<SinglePlayer />} />
+        {/* <Route path="/singleplayer" element={<SinglePlayer />} />
         <Route path="/multiplayer" element={<Multiplayer />} />
-        <Route path="/multiplayer/:roomId" element={<Multiplayer />} />
+        <Route path="/multiplayer/:roomId" element={<Multiplayer />} /> */}
       </Routes>
     </Router>
   );
