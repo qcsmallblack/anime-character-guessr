@@ -11,6 +11,7 @@ import Timer from '../components/Timer';
 import '../styles/game.css';
 import '../styles/SinglePlayer.css';
 import axios from 'axios';
+import { useLocalStorage } from 'usehooks-ts';
 
 function SinglePlayer() {
   const [guesses, setGuesses] = useState([]);
@@ -28,7 +29,7 @@ function SinglePlayer() {
     first: null,
     second: null
   });
-  const [gameSettings, setGameSettings] = useState({
+  const [gameSettings, setGameSettings, removeGameSettings] = useLocalStorage('singleplayer-game-settings', {
     startYear: new Date().getFullYear()-10,
     endYear: new Date().getFullYear(),
     topNSubjects: 50,
