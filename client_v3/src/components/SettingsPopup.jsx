@@ -389,7 +389,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     max="1000"
                     disabled={gameSettings.useIndex}
                   />
-                  <label>部（Bangumi）</label>
+                  <label>部（Bangumi）（此为总数）</label>
                 </div>
                 <div className="settings-row">
                   <label>使用目录：</label>
