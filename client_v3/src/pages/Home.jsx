@@ -32,7 +32,7 @@ const Home = () => {
           <br/>
           灵感来源<a href="https://blast.tv/counter-strikle">BLAST.tv</a>,
           数据来源<a href="https://bgm.tv/">Bangumi</a>。<br/>
-          <a href="https://space.bilibili.com/87983557">作者</a>：“感恩Bangumi。为了减少服务器负担，建议大家错峰游玩。”
+          <a href="https://space.bilibili.com/87983557">作者</a>：“感恩Bangumi。为了减少服务器负担，请大家错峰游玩。”<br/>
         </p>
         {/* <p>
           <a href="https://space.bilibili.com/87983557">作者</a>：实在对不起了大家，详情见……没有详情了，代码里调用的上游API挂了，所以暂时不能玩了。大伙早点休息吧。
