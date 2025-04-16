@@ -13,8 +13,7 @@ import '../styles/game.css';
 import CryptoJS from 'crypto-js';
 import { useLocalStorage } from 'usehooks-ts';
 
-// const secret = import.meta.env.VITE_AES_SECRET;
-const secret = '1234567890';
+const secret = import.meta.env.VITE_AES_SECRET;
 const SOCKET_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3000';
 
 const Multiplayer = () => {
