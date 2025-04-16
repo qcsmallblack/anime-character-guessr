@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './cached-axios';
 
 const API_BASE_URL = 'https://api.bgm.tv';
 
