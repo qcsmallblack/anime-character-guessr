@@ -228,7 +228,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterNum', 10);
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74622");
-                    onSettingsChange('enableHints', true);
+                    onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', true);
                     onSettingsChange('subjectSearch', false);
                   }}
