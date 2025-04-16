@@ -159,9 +159,9 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                 <button 
                   className="preset-button"
                   onClick={async () => {
-                    onSettingsChange('startYear', new Date().getFullYear()-10);
+                    onSettingsChange('startYear', new Date().getFullYear()-20);
                     onSettingsChange('endYear', new Date().getFullYear());
-                    onSettingsChange('topNSubjects', 50);
+                    onSettingsChange('topNSubjects', 100);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('useIndex', false);
                     onSettingsChange('addedSubjects', []);
@@ -169,7 +169,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterNum', 6);
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("");
-                    onSettingsChange('enableHints', true);
+                    onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
                   }}
@@ -188,7 +188,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterNum', 10);
                     onSettingsChange('maxAttempts', 7);
                     await setIndex("");
-                    onSettingsChange('enableHints', true);
+                    onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
                   }}
