@@ -8,6 +8,7 @@ import SearchBar from '../components/SearchBar';
 import GuessesTable from '../components/GuessesTable';
 import Timer from '../components/Timer';
 import PlayerList from '../components/PlayerList';
+import GameEndPopup from '../components/GameEndPopup';
 import '../styles/Multiplayer.css';
 import '../styles/game.css';
 import CryptoJS from 'crypto-js';
@@ -64,6 +65,7 @@ const Multiplayer = () => {
   const [guessesHistory, setGuessesHistory] = useState([]);
   const [showNames, setShowNames] = useState(true);
   const [currentSubjectSearch, setCurrentSubjectSearch] = useState(true);
+  const [showCharacterPopup, setShowCharacterPopup] = useState(false);
 
   useEffect(() => {
     // Initialize socket connection
@@ -108,7 +110,7 @@ const Multiplayer = () => {
       if (isPublic !== undefined) {
         setIsPublic(isPublic);
       }
-      
+
       // Prepare hints if enabled
       let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
       if (settings.enableHints && decryptedCharacter.summary) {
@@ -210,13 +212,13 @@ const Multiplayer = () => {
     if (gameEndedRef.current) return;
     gameEndedRef.current = true;
     setGameEnd(true);
-    
+
     // Emit game end event to server
     socket.emit('gameEnd', {
       roomId,
       result: isWin ? 'win' : 'lose'
     });
-    
+
     // Update player score
     if (isWin) {
       const updatedPlayers = players.map(p => {
@@ -232,13 +234,13 @@ const Multiplayer = () => {
 
   const handleCharacterSelect = async (character) => {
     if (isGuessing || !answerCharacter || gameEnd) return;
-    
+
     setIsGuessing(true);
     setShouldResetTimer(true);
-    
+
     try {
       const appearances = await getCharacterAppearances(character.id, gameSettings);
-      
+
       const guessData = {
         ...character,
         ...appearances
@@ -345,28 +347,28 @@ const Multiplayer = () => {
   const handleTimeUp = () => {
     if (timeUpRef.current || gameEnd || gameEndedRef.current) return;
     timeUpRef.current = true;
-  
+
     const newGuessesLeft = guessesLeft - 1;
-  
+
     setGuessesLeft(newGuessesLeft);
-  
+
     // Always emit timeout
     socket.emit('timeOut', { roomId });
-  
+
     if (newGuessesLeft <= 0) {
       setTimeout(() => {
         handleGameEnd(false);
       }, 100);
     }
-  
+
     setShouldResetTimer(true);
     setTimeout(() => {
       setShouldResetTimer(false);
       timeUpRef.current = false;
     }, 100);
   };
-  
-  
+
+
 
   const handleStartGame = async () => {
     if (isHost) {
@@ -374,17 +376,17 @@ const Multiplayer = () => {
         const character = await getRandomCharacter(gameSettings);
         // console.log(character);
         const encryptedCharacter = CryptoJS.AES.encrypt(JSON.stringify(character), secret).toString();
-        socket.emit('gameStart', { 
-          roomId, 
+        socket.emit('gameStart', {
+          roomId,
           character: encryptedCharacter,
-          settings: gameSettings 
+          settings: gameSettings
         });
 
         // Update local state
         setAnswerCharacter(character);
         setGuessesLeft(gameSettings.maxAttempts);
         setCurrentSubjectSearch(gameSettings.subjectSearch);
-        
+
         // Prepare hints if enabled
         let hintTexts = ['🚫提示未启用', '🚫提示未启用'];
         if (gameSettings.enableHints && character.summary) {
@@ -451,10 +453,10 @@ const Multiplayer = () => {
         </div>
       ) : (
         <>
-          <PlayerList 
-            players={players} 
+          <PlayerList
+            players={players}
             socket={socket}
-            isGameStarted={isGameStarted} 
+            isGameStarted={isGameStarted}
             handleReadyToggle={handleReadyToggle}
             onAnonymousModeChange={setShowNames}
           />
@@ -477,21 +479,21 @@ const Multiplayer = () => {
               {isHost && (
                 <div className="host-game-controls">
                   <div className="button-group">
-                    <button 
+                    <button
                       onClick={handleVisibilityToggle}
                       className="visibility-button"
                     >
                       {isPublic ? '🔓公开' : '🔒私密'}
                     </button>
-                    <button 
-                      onClick={() => setShowSettings(true)} 
+                    <button
+                      onClick={() => setShowSettings(true)}
                       className="settings-button"
                     >
                       设置
                     </button>
-                    <button 
+                    <button
                       onClick={handleStartGame}
-                      className="start-game-button" 
+                      className="start-game-button"
                       disabled={players.length < 2 || players.some(p => !p.isHost && !p.ready && !p.disconnected)}
                     >
                       开始
@@ -513,7 +515,7 @@ const Multiplayer = () => {
           {isGameStarted && !globalGameEnd && (
             // In game
             <div className="container">
-              <SearchBar 
+              <SearchBar
                 onCharacterSelect={handleCharacterSelect}
                 isGuessing={isGuessing}
                 gameEnd={gameEnd}
@@ -536,10 +538,10 @@ const Multiplayer = () => {
                   </div>
                 )}
               </div>
-              <GuessesTable 
+              <GuessesTable
                 guesses={guesses}
                 getGenderEmoji={getGenderEmoji}
-              />   
+              />
             </div>
           )}
 
@@ -549,21 +551,21 @@ const Multiplayer = () => {
               {isHost && (
                 <div className="host-game-controls">
                   <div className="button-group">
-                    <button 
+                    <button
                       onClick={handleVisibilityToggle}
                       className="visibility-button"
                     >
                       {isPublic ? '🔓公开' : '🔒私密'}
                     </button>
-                    <button 
-                      onClick={() => setShowSettings(true)} 
+                    <button
+                      onClick={() => setShowSettings(true)}
                       className="settings-button"
                     >
                       设置
                     </button>
-                    <button 
+                    <button
                       onClick={handleStartGame}
-                      className="start-game-button" 
+                      className="start-game-button"
                       disabled={players.length < 2 || players.some(p => !p.isHost && !p.ready && !p.disconnected)}
                     >
                       开始
@@ -573,6 +575,12 @@ const Multiplayer = () => {
               )}
               <div className="game-end-message">
                 {showNames ? <>{winner}<br /></> : ''} 答案是: {answerCharacter.nameCn}
+                <button
+                  className="character-details-button"
+                  onClick={() => setShowCharacterPopup(true)}
+                >
+                  查看角色详情
+                </button>
               </div>
               <div className="game-end-container">
                 {!isHost && (
@@ -622,6 +630,14 @@ const Multiplayer = () => {
               hideRestart={true}
             />
           )}
+
+          {showCharacterPopup && answerCharacter && (
+            <GameEndPopup
+              result={guesses.some(g => g.isAnswer) ? 'win' : 'lose'}
+              answer={answerCharacter}
+              onClose={() => setShowCharacterPopup(false)}
+            />
+          )}
         </>
 
       )}
@@ -629,4 +645,4 @@ const Multiplayer = () => {
   );
 };
 
-export default Multiplayer; 
+export default Multiplayer;
