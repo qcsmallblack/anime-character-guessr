@@ -49,7 +49,7 @@ function SinglePlayer() {
   // Initialize game
   useEffect(() => {
     let isMounted = true;
-    
+
     axios.get('https://anime-character-guessr.onrender.com/').then(response => {
       console.log(response.data);
     });
@@ -99,7 +99,7 @@ function SinglePlayer() {
 
   const handleCharacterSelect = async (character) => {
     if (isGuessing || !answerCharacter) return;
-    
+
     setIsGuessing(true);
     setShouldResetTimer(true);
     if (character.id === 56822 || character.id === 56823) {
@@ -108,12 +108,12 @@ function SinglePlayer() {
 
     try {
       const appearances = await getCharacterAppearances(character.id, gameSettings);
-      
+
       const guessData = {
         ...character,
         ...appearances
       };
-      
+
       const isCorrect = guessData.id === answerCharacter.id;
       setGuessesLeft(prev => prev - 1);
 
@@ -291,15 +291,26 @@ function SinglePlayer() {
     }, 100);
   };
 
+  const handleSurrender = () => {
+    if (gameEnd) return;
+
+    setGameEnd(true);
+    setGameEndPopup({
+      result: 'lose',
+      answer: answerCharacter
+    });
+    alert('已投降！查看角色详情');
+  };
+
   return (
     <div className="container single-player-container">
-      <SocialLinks 
+      <SocialLinks
         onSettingsClick={() => setSettingsPopup(true)}
         onHelpClick={() => setHelpPopup(true)}
       />
-      
+
       <div className="search-bar">
-        <SearchBar 
+        <SearchBar
           onCharacterSelect={handleCharacterSelect}
           isGuessing={isGuessing}
           gameEnd={gameEnd}
@@ -316,20 +327,21 @@ function SinglePlayer() {
         />
       )}
 
-      <GameInfo 
+      <GameInfo
         gameEnd={gameEnd}
         guessesLeft={guessesLeft}
         onRestart={handleRestartWithSettings}
         answerCharacter={answerCharacter}
         hints={hints}
+        onSurrender={handleSurrender}
       />
 
-      <GuessesTable 
+      <GuessesTable
         guesses={guesses}
       />
 
       {settingsPopup && (
-        <SettingsPopup 
+        <SettingsPopup
           gameSettings={gameSettings}
           onSettingsChange={handleSettingsChange}
           onClose={() => setSettingsPopup(false)}
@@ -342,7 +354,7 @@ function SinglePlayer() {
       )}
 
       {gameEndPopup && (
-        <GameEndPopup 
+        <GameEndPopup
           result={gameEndPopup.result}
           answer={gameEndPopup.answer}
           onClose={() => setGameEndPopup(null)}
