@@ -45,7 +45,7 @@ function SinglePlayer() {
     timeLimit: null,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 4
+    subjectTagNum: 6
   });
 
   // Initialize game

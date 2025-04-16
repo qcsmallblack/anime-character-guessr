@@ -174,7 +174,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('subjectTagNum', 6);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -195,7 +195,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
-                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('subjectTagNum', 6);
                     onSettingsChange('characterTagNum', 5);
                   }}
                 >
@@ -217,7 +217,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('subjectTagNum', 6);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
