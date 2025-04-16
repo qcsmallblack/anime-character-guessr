@@ -14,8 +14,8 @@ const cors_options = {
         process.env.CLIENT_URL,
         process.env.SERVER_URL
     ],
-    methods: ['GET', 'POST'],
-    credentials: true
+      methods: ['GET', 'POST'],
+      credentials: true
 }
 
 const io = new Server(server, {
@@ -38,7 +38,7 @@ io.on('connection', (socket) => {
       socket.emit('error', { message: '用户名呢' });
       return;
     }
-    
+
     if (rooms.has(roomId)) {
         socket.emit('error', { message: '房间已存在？但为什么？' });
         return;
@@ -64,7 +64,7 @@ io.on('connection', (socket) => {
 
     // Join socket to room
     socket.join(roomId);
-    
+
     // Send room data back to host
     io.to(roomId).emit('updatePlayers', {
       players: rooms.get(roomId).players,
@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
     }
 
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -136,7 +136,7 @@ io.on('connection', (socket) => {
   // Handle ready status toggle
   socket.on('toggleReady', ({ roomId }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -144,7 +144,7 @@ io.on('connection', (socket) => {
 
     // Find the player
     const player = room.players.find(p => p.id === socket.id);
-    
+
     if (!player) {
       socket.emit('error', { message: 'Player not found in room' });
       return;
@@ -170,7 +170,7 @@ io.on('connection', (socket) => {
   // Handle game settings update
   socket.on('updateGameSettings', ({ roomId, settings }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -188,14 +188,14 @@ io.on('connection', (socket) => {
 
     // Broadcast settings to all clients in the room
     io.to(roomId).emit('updateGameSettings', { settings });
-    
+
     console.log(`Game settings updated in room ${roomId}`);
   });
 
   // Handle game start
   socket.on('gameStart', ({ roomId, character, settings }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -236,20 +236,20 @@ io.on('connection', (socket) => {
     });
 
     // Broadcast game start and updated players to all clients in the room in a single event
-    io.to(roomId).emit('gameStart', { 
+    io.to(roomId).emit('gameStart', {
       character,
       settings,
       players: room.players,
       isPublic: false
     });
-    
+
     console.log(`Game started in room ${roomId}`);
   });
 
   // Handle player guesses
   socket.on('playerGuess', ({ roomId, guessResult }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -281,14 +281,14 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('updatePlayers', {
       players: room.players
     });
-    
+
     console.log(`Player ${player.username} made a guess in room ${roomId}: ${guessResult.name} (${guessResult.isCorrect ? 'correct' : 'incorrect'})`);
   });
 
   // Handle game end
   socket.on('gameEnd', ({ roomId, result }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -301,10 +301,14 @@ io.on('connection', (socket) => {
     }
 
     // Update player's guesses string
-    player.guesses += result === 'win' ? '✌' : '💀';
+    if (result === 'surrender') {
+      player.guesses += '🏳️';
+    } else {
+      player.guesses += result === 'win' ? '✌' : '💀';
+    }
 
     // Check if all players have ended their game or disconnected
-    const allEnded = room.players.every(p => p.guesses.includes('✌') || p.guesses.includes('💀') || p.disconnected);
+    const allEnded = room.players.every(p => p.guesses.includes('✌') || p.guesses.includes('💀') || p.guesses.includes('🏳️') || p.disconnected);
     const winner = room.players.find(p => p.guesses.includes('✌'));
 
     if (winner) {
@@ -340,14 +344,14 @@ io.on('connection', (socket) => {
     io.to(roomId).emit('updatePlayers', {
       players: room.players
     });
-    
+
     console.log(`Player ${player.username} ended their game in room ${roomId} with result: ${result}`);
   });
 
   // Handle game settings request
   socket.on('requestGameSettings', ({ roomId }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -360,10 +364,36 @@ io.on('connection', (socket) => {
     }
   });
 
+  // Handle surrender event
+  socket.on('surrender', ({ roomId }) => {
+    const room = rooms.get(roomId);
+
+    if (!room) {
+      socket.emit('error', { message: 'Room not found' });
+      return;
+    }
+
+    const player = room.players.find(p => p.id === socket.id);
+    if (!player) {
+      socket.emit('error', { message: 'Player not found in room' });
+      return;
+    }
+
+    // Append 🏳️ to player's guesses
+    player.guesses += '🏳️';
+
+    // Broadcast updated players to all clients in the room
+    io.to(roomId).emit('updatePlayers', {
+      players: room.players
+    });
+
+    console.log(`Player ${player.username} surrendered in room ${roomId}`);
+  });
+
   // Handle timeout event
   socket.on('timeOut', ({ roomId }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
@@ -391,10 +421,10 @@ io.on('connection', (socket) => {
     // Find and remove player from their room
     for (const [roomId, room] of rooms.entries()) {
       const playerIndex = room.players.findIndex(p => p.id === socket.id);
-      
+
       if (playerIndex !== -1) {
         const disconnectedPlayer = room.players[playerIndex];
-        
+
         if (room.host === socket.id) {
           rooms.delete(roomId);
           // Notify remaining players the room is closed
@@ -416,14 +446,14 @@ io.on('connection', (socket) => {
         break; // Exit loop once player is found and handled
       }
     }
-    
+
     console.log(`User ${socket.id} disconnected`); // General disconnect log
   });
 
   // Handle room visibility toggle
   socket.on('toggleRoomVisibility', ({ roomId }) => {
     const room = rooms.get(roomId);
-    
+
     if (!room) {
       socket.emit('error', { message: 'Room not found' });
       return;
