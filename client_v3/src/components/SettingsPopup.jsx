@@ -173,7 +173,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("");
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
-                    onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectSearch', false);
                     onSettingsChange('subjectTagNum', 3);
                     onSettingsChange('characterTagNum', 6);
                   }}
