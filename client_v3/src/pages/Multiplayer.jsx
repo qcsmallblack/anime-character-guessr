@@ -43,7 +43,9 @@ const Multiplayer = () => {
     enableHints: true,
     includeGame: false,
     timeLimit: 60,
-    subjectSearch: true
+    subjectSearch: true,
+    characterTagNum: 6,
+    subjectTagNum: 4
   });
 
   // Game state

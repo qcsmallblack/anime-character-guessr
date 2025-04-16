@@ -43,7 +43,9 @@ function SinglePlayer() {
     enableHints: true,
     includeGame: false,
     timeLimit: null,
-    subjectSearch: true
+    subjectSearch: true,
+    characterTagNum: 6,
+    subjectTagNum: 4
   });
 
   // Initialize game
