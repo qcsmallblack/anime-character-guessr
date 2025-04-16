@@ -35,7 +35,7 @@ function GuessesTable({ guesses }) {
             <th>人气</th>
             <th>作品数<br/>最高分</th>
             <th>最晚登场<br/>最早登场</th>
-            <th>作品标签</th>
+            <th>标签</th>
             <th>共同出演</th>
           </tr>
         </thead>

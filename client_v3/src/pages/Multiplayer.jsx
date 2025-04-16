@@ -380,8 +380,6 @@ const Multiplayer = () => {
     });
   };
 
-
-
   const handleStartGame = async () => {
     if (isHost) {
       try {
@@ -595,6 +593,12 @@ const Multiplayer = () => {
               )}
               <div className="game-end-message">
                 {showNames ? <>{winner}<br /></> : ''} 答案是: {answerCharacter.nameCn}
+                <button
+                  className="character-details-button"
+                  onClick={() => setShowCharacterPopup(true)}
+                >
+                  查看角色详情
+                </button>
               </div>
               <div className="game-end-container">
                 {!isHost && (
@@ -642,6 +646,14 @@ const Multiplayer = () => {
               onSettingsChange={handleSettingsChange}
               onClose={() => setShowSettings(false)}
               hideRestart={true}
+            />
+          )}
+
+          {showCharacterPopup && answerCharacter && (
+            <GameEndPopup
+              result={guesses.some(g => g.isAnswer) ? 'win' : 'lose'}
+              answer={answerCharacter}
+              onClose={() => setShowCharacterPopup(false)}
             />
           )}
         </>
