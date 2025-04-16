@@ -152,6 +152,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   入门
@@ -172,6 +174,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   冻鳗高手
@@ -191,6 +195,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('characterTagNum', 5);
                   }}
                 >
                   瓶子严选
@@ -211,6 +217,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   木柜子乐队
@@ -231,6 +239,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', true);
                     onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   二游高手
