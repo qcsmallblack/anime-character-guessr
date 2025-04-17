@@ -52,7 +52,7 @@ function SinglePlayer() {
   useEffect(() => {
     let isMounted = true;
 
-    axios.get('https://anime-character-guessr.onrender.com/').then(response => {
+    axios.get(import.meta.env.VITE_SERVER_URL).then(response => {
       console.log(response.data);
     });
 
