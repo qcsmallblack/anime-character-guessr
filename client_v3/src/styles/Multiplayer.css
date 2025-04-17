@@ -429,23 +429,32 @@
     background: #e2e8f0;
     color: #1e293b;
   }
+  
+  .visibility-button {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+  }
+  
+  .visibility-button:hover {
+    background-color: #e67e22;
+  }
 }
 
 .visibility-button {
   padding: 8px 16px;
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 4px;
-  background-color: #fff;
+  background-color: #f39c12;
+  color: white;
   cursor: pointer;
   font-size: 14px;
   transition: all 0.3s ease;
 }
 
 .visibility-button:hover {
-  background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
-
-
 
 .fa-angle-left {
   width:30px;
@@ -473,4 +482,5 @@
   transform: scale(1.1);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   background: linear-gradient(135deg, #a777e3, #6e8efb);
+  background-color: #e67e22;
 }

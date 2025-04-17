@@ -40,17 +40,19 @@ function SinglePlayer() {
     mainCharacterOnly: true,
     characterNum: 6,
     maxAttempts: 10,
-    enableHints: true,
+    enableHints: false,
     includeGame: false,
     timeLimit: null,
-    subjectSearch: true
+    subjectSearch: true,
+    characterTagNum: 6,
+    subjectTagNum: 6
   });
 
   // Initialize game
   useEffect(() => {
     let isMounted = true;
 
-    axios.get('https://anime-character-guessr.onrender.com/').then(response => {
+    axios.get(import.meta.env.VITE_SERVER_URL).then(response => {
       console.log(response.data);
     });
 

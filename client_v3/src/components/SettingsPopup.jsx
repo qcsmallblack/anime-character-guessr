@@ -152,6 +152,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   入门
@@ -171,7 +173,9 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     await setIndex("");
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
-                    onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   冻鳗高手
@@ -191,6 +195,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
+                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('characterTagNum', 5);
                   }}
                 >
                   瓶子严选
@@ -211,6 +217,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   木柜子乐队
@@ -228,9 +236,11 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterNum', 10);
                     onSettingsChange('maxAttempts', 10);
                     await setIndex("74622");
-                    onSettingsChange('enableHints', true);
+                    onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', true);
                     onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 3);
+                    onSettingsChange('characterTagNum', 6);
                   }}
                 >
                   二游高手
@@ -536,6 +546,32 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     />
                   </div>
                 )}
+                <div className="settings-row">
+                  <label>角色标签数：</label>
+                  <input 
+                    type="number"
+                    value={gameSettings.characterTagNum || ''}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Math.max(0, Math.min(10, parseInt(e.target.value) || 0));
+                      onSettingsChange('characterTagNum', value);
+                    }}
+                    min="0"
+                    max="10"
+                  />
+                </div>
+                <div className="settings-row">
+                  <label>作品标签数：</label>
+                  <input 
+                    type="number"
+                    value={gameSettings.subjectTagNum || ''}
+                    onChange={(e) => {
+                      const value = e.target.value === '' ? 0 : Math.max(0, Math.min(10, parseInt(e.target.value) || 0));
+                      onSettingsChange('subjectTagNum', value);
+                    }}
+                    min="0"
+                    max="10"
+                  />
+                </div>
               </div>
             </div>
 

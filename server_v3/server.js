@@ -8,11 +8,13 @@ require('dotenv').config();
 const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 3000;
-// const secret = "my-secret-key";
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
+
 const cors_options = {
     origin: [
-        process.env.CLIENT_URL,
-        process.env.SERVER_URL
+        CLIENT_URL,
+        SERVER_URL
     ],
       methods: ['GET', 'POST'],
       credentials: true

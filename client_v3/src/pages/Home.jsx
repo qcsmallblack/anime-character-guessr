@@ -32,7 +32,8 @@ const Home = () => {
           灵感来源<a href="https://blast.tv/counter-strikle">BLAST.tv</a>,
           数据来源<a href="https://bgm.tv/">Bangumi</a>。<br />
           <a href="https://space.bilibili.com/87983557">作者</a>：“感谢 Bangumi 管理员的优化支持，以及各位网友贡献的代码。感谢大家这段时间的热情和支持。<br/>
-          角色标签暂时用了大佬分享的爬虫数据，之后会换成大家贡献的标签的。祝大家玩得开心！”
+          角色标签暂时用了大佬分享的爬虫数据，之后会换成大家贡献的标签的。祝大家玩得开心！”<br/>
+          另：由于标签覆盖范围问题，用灰色标签排除不一定准确，请尽量参考绿色标签。
         </p>
       </div>
     </div>
