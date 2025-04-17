@@ -106,6 +106,7 @@ async function getCharacterAppearances(characterId, gameSettings) {
     let earliestAppearance = -1;
     let highestRating = -1;
     const tagCounts = new Map(); // Track cumulative counts for each tag
+    const metaTagCounts = new Map(); // Track cumulative counts for each meta tag
     const allMetaTags = new Set();
 
     // Get just the names and collect meta tags
@@ -130,17 +131,20 @@ async function getCharacterAppearances(characterId, gameSettings) {
             highestRating = details.rating;
           }
 
-          details.meta_tags.forEach(tag => allMetaTags.add(tag));
-
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
             tagCounts.set(name, (tagCounts.get(name) || 0) + count);
+          });
+
+          details.meta_tags.forEach(tag => {
+            metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
           });
 
           return {
             name: details.name,
             rating_count: details.rating_count
           };
+
         } catch (error) {
           console.error(`Failed to get details for subject ${appearance.id}:`, error);
           return null;
@@ -153,6 +157,15 @@ async function getCharacterAppearances(characterId, gameSettings) {
       .map(([name, count]) => ({ [name]: count }))
       .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
 
+    const sortedMetaTags = Array.from(metaTagCounts.entries())
+      .map(([name, count]) => ({ [name]: count }))
+      .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
+    for (const tagObj of sortedMetaTags) {
+      if (allMetaTags.size >= gameSettings.subjectTagNum) break;
+      allMetaTags.add(Object.keys(tagObj)[0]);
+    }
+    
     if (idToTags && idToTags[characterId]) {
       idToTags[characterId].slice(0, Math.min(gameSettings.characterTagNum, idToTags[characterId].length)).forEach(tag => allMetaTags.add(tag));
     }
