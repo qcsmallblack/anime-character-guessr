@@ -45,7 +45,8 @@ const Multiplayer = () => {
     timeLimit: 60,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 6
+    subjectTagNum: 6,
+    enableTagCensor: false,
   });
 
   // Game state
@@ -561,6 +562,7 @@ const Multiplayer = () => {
               <GuessesTable
                 guesses={guesses}
                 getGenderEmoji={getGenderEmoji}
+                enableTagCensor={gameSettings.enableTagCensor}
               />
             </div>
           )}
