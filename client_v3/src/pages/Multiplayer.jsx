@@ -445,6 +445,17 @@ const Multiplayer = () => {
 
   return (
     <div className="multiplayer-container">
+      <a
+          href="/"
+          className="social-link floating-back-button"
+          title="Back"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/');
+          }}
+      >
+        <i className="fas fa-angle-left"></i>
+      </a>
       {!isJoined ? (
         <div className="join-container">
           <h2>{isHost ? '创建房间' : '加入房间'}</h2>
