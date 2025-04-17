@@ -105,6 +105,8 @@ async function getCharacterAppearances(characterId, gameSettings) {
     let latestAppearance = -1;
     let earliestAppearance = -1;
     let highestRating = -1;
+    const sourceTags = new Set(['原创', '游戏改', '小说改', '漫画改']);
+    const sourceTagCounts = new Map();
     const tagCounts = new Map(); // Track cumulative counts for each tag
     const metaTagCounts = new Map(); // Track cumulative counts for each meta tag
     const allMetaTags = new Set();
@@ -132,12 +134,20 @@ async function getCharacterAppearances(characterId, gameSettings) {
           }
 
           details.tags.forEach(tagObj => {
-            const [[name, count]] = Object.entries(tagObj);
-            tagCounts.set(name, (tagCounts.get(name) || 0) + count);
+            if (Object.keys(tagObj)[0] != '日本') {
+              const [[name, count]] = Object.entries(tagObj);
+              tagCounts.set(name, (tagCounts.get(name) || 0) + count);
+            }
           });
 
           details.meta_tags.forEach(tag => {
-            metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
+            if (tag === '日本') {
+              return;
+            } else if (sourceTags.has(tag)) {
+              sourceTagCounts.set(tag, (sourceTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
+            } else {
+              metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
+            }
           });
 
           return {
@@ -152,6 +162,10 @@ async function getCharacterAppearances(characterId, gameSettings) {
       })
     );
 
+    const sortedSourceTags = Array.from(sourceTagCounts.entries())
+      .map(([name, count]) => ({ [name]: count }))
+      .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
     // Convert tagCounts to array of objects and sort by count
     const sortedTags = Array.from(tagCounts.entries())
       .map(([name, count]) => ({ [name]: count }))
@@ -160,6 +174,9 @@ async function getCharacterAppearances(characterId, gameSettings) {
     const sortedMetaTags = Array.from(metaTagCounts.entries())
       .map(([name, count]) => ({ [name]: count }))
       .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
+
+    // Only add one source tag to avoid confusion
+    allMetaTags.add(Object.keys(sortedSourceTags[0])[0]);
 
     for (const tagObj of sortedMetaTags) {
       if (allMetaTags.size >= gameSettings.subjectTagNum) break;
