@@ -40,7 +40,7 @@ const Multiplayer = () => {
     mainCharacterOnly: true,
     characterNum: 6,
     maxAttempts: 10,
-    enableHints: true,
+    enableHints: false,
     includeGame: false,
     timeLimit: 60,
     subjectSearch: true,

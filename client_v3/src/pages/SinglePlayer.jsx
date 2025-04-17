@@ -40,7 +40,7 @@ function SinglePlayer() {
     mainCharacterOnly: true,
     characterNum: 6,
     maxAttempts: 10,
-    enableHints: true,
+    enableHints: false,
     includeGame: false,
     timeLimit: null,
     subjectSearch: true,
