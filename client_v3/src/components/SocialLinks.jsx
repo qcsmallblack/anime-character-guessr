@@ -10,6 +10,9 @@ function SocialLinks({ onSettingsClick, onHelpClick }) {
       <button className="social-link settings-button" onClick={onSettingsClick}>
         <i className="fas fa-cog"></i>
       </button>
+      <a href="/" className="social-link" title="Home">
+          <i className="fas fa-home"></i>
+      </a>
       <button className="social-link help-button" onClick={onHelpClick}>
         <i className="fas fa-question-circle"></i>
       </button>
