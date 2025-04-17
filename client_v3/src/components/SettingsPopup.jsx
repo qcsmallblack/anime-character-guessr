@@ -578,6 +578,16 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
             <div className="settings-section">
               <h3>游戏设置</h3>
               <div className="settings-row">
+                <label>主播模式：</label>
+                <input 
+                  type="checkbox"
+                  checked={gameSettings.enableTagCensor}
+                  onChange={(e) => {
+                    onSettingsChange('enableTagCensor', e.target.checked);
+                  }}
+                />
+              </div>
+              <div className="settings-row">
                 <label>每局次数：</label>
                 <input 
                   type="number"

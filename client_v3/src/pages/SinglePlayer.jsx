@@ -45,7 +45,8 @@ function SinglePlayer() {
     timeLimit: null,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 6
+    subjectTagNum: 6,
+    enableTagCensor: false,
   });
 
   // Initialize game
@@ -340,6 +341,7 @@ function SinglePlayer() {
 
       <GuessesTable
         guesses={guesses}
+        enableTagCensor={gameSettings.enableTagCensor}
       />
 
       {settingsPopup && (
