@@ -453,5 +453,34 @@
 }
 
 .visibility-button:hover {
+    background-color: #f0f0f0;
+}
+
+.fa-angle-left {
+  width:30px;
+  height: 30px;
+  font-size: 24px;  /* 调大图标大小 */
+  color: white;
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  padding: 16px 18px 16px 16px;  /* 调大内边距，使按钮更大 */
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  /* 固定在左上角 */
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;  /* 确保按钮在最上层 */
+}
+
+.fa-angle-left:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #a777e3, #6e8efb);
   background-color: #e67e22;
 }
