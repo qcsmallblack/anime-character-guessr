@@ -130,7 +130,8 @@ async function getCharacterAppearances(characterId, gameSettings) {
             highestRating = details.rating;
           }
 
-          // Merge tag counts
+          details.meta_tags.forEach(tag => allMetaTags.add(tag));
+
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
             tagCounts.set(name, (tagCounts.get(name) || 0) + count);
@@ -156,13 +157,9 @@ async function getCharacterAppearances(characterId, gameSettings) {
       idToTags[characterId].slice(0, Math.min(gameSettings.characterTagNum, idToTags[characterId].length)).forEach(tag => allMetaTags.add(tag));
     }
     
-    // Add at most subjectTagNum tags from sortedTags
-    let addedTagCount = 0;
     for (const tagObj of sortedTags) {
-      if (addedTagCount >= gameSettings.subjectTagNum) break;
-      const tagName = Object.keys(tagObj)[0];
-      allMetaTags.add(tagName);
-      addedTagCount++;
+      if (allMetaTags.size >= gameSettings.subjectTagNum+gameSettings.characterTagNum) break;
+      allMetaTags.add(Object.keys(tagObj)[0]);
     }
     
     const validAppearances = appearances
