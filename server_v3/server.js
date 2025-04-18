@@ -103,6 +103,12 @@ io.on('connection', (socket) => {
       return;
     }
 
+    // Check if room is full (max 8 players)
+    if (room.players.length >= 8) {
+      socket.emit('error', { message: '房间已满（最多8人）' });
+      return;
+    }
+
     // Check for duplicate username (case-insensitive)
     const isUsernameTaken = room.players.some(
       player => player.username.toLowerCase() === username.toLowerCase()
@@ -303,10 +309,15 @@ io.on('connection', (socket) => {
     }
 
     // Update player's guesses string
-    if (result === 'surrender') {
-      player.guesses += '🏳️';
-    } else {
-      player.guesses += result === 'win' ? '✌' : '💀';
+    switch (result) {
+      case 'surrender':
+        player.guesses += '🏳️';
+        break;
+      case 'win':
+        player.guesses += '✌';
+        break;
+      default:
+        player.guesses += '💀';
     }
 
     // Check if all players have ended their game or disconnected
