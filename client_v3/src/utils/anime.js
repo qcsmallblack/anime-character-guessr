@@ -133,6 +133,13 @@ async function getCharacterAppearances(characterId, gameSettings) {
             highestRating = details.rating;
           }
 
+          details.tags.forEach(tagObj => {
+            if (Object.keys(tagObj)[0] != '日本') {
+              const [[name, count]] = Object.entries(tagObj);
+              tagCounts.set(name, (tagCounts.get(name) || 0) + count);
+            }
+          });
+
           details.meta_tags.forEach(tag => {
             if (tag === '日本') {
               return;
@@ -140,16 +147,6 @@ async function getCharacterAppearances(characterId, gameSettings) {
               sourceTagCounts.set(tag, (sourceTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
             } else {
               metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
-            }
-          });
-
-          details.tags.forEach(tagObj => {
-            const [[name, count]] = Object.entries(tagObj);
-            if (name === '轻小说改'){
-              metaTagCounts.set('小说改', (metaTagCounts.get('小说改') || 0) + count);
-            }
-            else if (name != '日本') {
-              tagCounts.set(name, (tagCounts.get(name) || 0) + count);
             }
           });
 
@@ -289,9 +286,6 @@ async function getRandomCharacter(gameSettings) {
     let subject;
     let total;
     let randomOffset;
-    const batchSize = 10;
-    let batchOffset;
-    let indexInBatch;
     
     if (gameSettings.useIndex && gameSettings.indexId) {
       // Get index info first
@@ -306,61 +300,21 @@ async function getRandomCharacter(gameSettings) {
         randomOffset = randomOffset - indexInfo.total;
         subject = gameSettings.addedSubjects[randomOffset];
       } else {
-        // Calculate batch-aligned offset and select random item from batch
-        batchOffset = Math.floor(randomOffset / batchSize) * batchSize;
-        indexInBatch = randomOffset % batchSize;
-        // Fetch batch of subjects from the index
+        // Fetch one subject from the index at the random offset
         const response = await axios.get(
-          `${API_BASE_URL}/v0/indices/${gameSettings.indexId}/subjects?limit=${batchSize}&offset=${batchOffset}`
+          `${API_BASE_URL}/v0/indices/${gameSettings.indexId}/subjects?limit=1&offset=${randomOffset}`
         );
 
         if (!response.data || !response.data.data || response.data.data.length === 0) {
           throw new Error('No subjects found in index');
         }
 
-        subject = response.data.data[Math.min(indexInBatch, response.data.data.length - 1)];
+        subject = response.data.data[0];
       }
-    }
-    else if (gameSettings.useSubjectPerYear){
-      const startYear = gameSettings.startYear;
-      const endYear = Math.min(gameSettings.endYear, new Date().getFullYear());
-      const randomYear = startYear + Math.floor(Math.random() * (endYear - startYear + 1));
-
-      const endDate = new Date(`${randomYear + 1}-01-01`);
-      const today = new Date();
-      const minDate = new Date(Math.min(endDate.getTime(), today.getTime())).toISOString().split('T')[0];
-
-      total = gameSettings.topNSubjects*(randomYear-startYear+1) + gameSettings.addedSubjects.length;
-      randomOffset = Math.floor(Math.random() * total);
-      
-      if (randomOffset >= gameSettings.topNSubjects) {
-        randomOffset = randomOffset - gameSettings.topNSubjects;
-        subject = gameSettings.addedSubjects[randomOffset];
-      } 
-      else {
-        randomOffset = Math.floor(Math.random() * gameSettings.topNSubjects);
-        batchOffset = Math.floor(randomOffset / batchSize) * batchSize;
-        indexInBatch = randomOffset % batchSize;
-        const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=${batchSize}&offset=${batchOffset}`, {
-          "sort": "heat",
-          "filter": {
-            "type": [2],
-            "air_date": [
-              `>=${randomYear}-01-01`,
-              `<${minDate}`
-            ],
-            "meta_tags": gameSettings.metaTags.filter(tag => tag !== "")
-          }
-        });
-        if (!response.data || !response.data.data || response.data.data.length === 0) {
-          throw new Error('Failed to fetch subject for the selected year');
-        }
-        subject = response.data.data[Math.min(indexInBatch, response.data.data.length - 1)];
-      }
-    }
-    else {
+    } else {
       gameSettings.useIndex = false;
       total = gameSettings.topNSubjects+gameSettings.addedSubjects.length;
+      
       randomOffset = Math.floor(Math.random() * total);
       const endDate = new Date(`${gameSettings.endYear + 1}-01-01`);
       const today = new Date();
@@ -369,14 +323,9 @@ async function getRandomCharacter(gameSettings) {
       if (randomOffset >= gameSettings.topNSubjects) {
         randomOffset = randomOffset - gameSettings.topNSubjects;
         subject = gameSettings.addedSubjects[randomOffset];
-      } 
-      else {
-        // Calculate batch-aligned offset
-        batchOffset = Math.floor(randomOffset / batchSize) * batchSize;
-        indexInBatch = randomOffset % batchSize;
-        
-        // Fetch batch of subjects
-        const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=${batchSize}&offset=${batchOffset}`, {
+      } else {
+        // Fetch one subject at the random offset
+        const response = await axios.post(`${API_BASE_URL}/v0/search/subjects?limit=1&offset=${randomOffset}`, {
           "sort": "heat",
           "filter": {
             "type": [2],
@@ -392,7 +341,7 @@ async function getRandomCharacter(gameSettings) {
           throw new Error('Failed to fetch subject at random offset');
         }
 
-        subject = response.data.data[Math.min(indexInBatch, response.data.data.length - 1)];
+        subject = response.data.data[0];
       }
     }
 
