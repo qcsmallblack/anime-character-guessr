@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  client:
+    build:
+      context: ./client_v3
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_SERVER_URL=http://localhost:3000
+      - VITE_DB_SERVER_URL=http://localhost:3001
+      - VITE_AES_SECRET=My-Secret-Key
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./server_v3
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CLIENT_URL=http://localhost:5173
+      - SERVER_URL=http://localhost:3000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge 
