@@ -153,7 +153,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -176,7 +176,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -199,7 +199,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -221,7 +221,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 5);
                   }}
                 >
@@ -244,7 +244,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >

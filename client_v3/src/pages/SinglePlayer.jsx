@@ -46,7 +46,7 @@ function SinglePlayer() {
     timeLimit: null,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 6,
+    subjectTagNum: 8,
     enableTagCensor: false,
   });
 
