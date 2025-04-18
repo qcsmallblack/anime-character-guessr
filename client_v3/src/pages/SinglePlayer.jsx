@@ -307,7 +307,7 @@ function SinglePlayer() {
   };
 
   return (
-    <div className="container single-player-container">
+    <div className="single-player-container">
       <SocialLinks
         onSettingsClick={() => setSettingsPopup(true)}
         onHelpClick={() => setHelpPopup(true)}
