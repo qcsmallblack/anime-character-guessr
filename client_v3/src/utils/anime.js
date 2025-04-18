@@ -465,17 +465,15 @@ function generateFeedback(guess, answerCharacter) {
 
   // Handle rating comparison
   const ratingDiff = guess.highestRating - answerCharacter.highestRating;
-  const ratingFivePercent = answerCharacter.highestRating * 0.02;
-  const ratingTwentyPercent = answerCharacter.highestRating * 0.1;
   let ratingFeedback;
   if (guess.highestRating === -1 || answerCharacter.highestRating === -1) {
     ratingFeedback = '?';
-  } else if (Math.abs(ratingDiff) <= ratingFivePercent) {
+  } else if (Math.abs(ratingDiff) <= 0.2) {
     ratingFeedback = '=';
   } else if (ratingDiff > 0) {
-    ratingFeedback = ratingDiff <= ratingTwentyPercent ? '+' : '++';
+    ratingFeedback = ratingDiff <= 0.5 ? '+' : '++';
   } else {
-    ratingFeedback = ratingDiff >= -ratingTwentyPercent ? '-' : '--';
+    ratingFeedback = ratingDiff >= -0.5 ? '-' : '--';
   }
   result.rating = {
     guess: guess.highestRating,
