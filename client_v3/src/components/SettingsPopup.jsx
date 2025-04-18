@@ -142,6 +142,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('startYear', new Date().getFullYear()-5);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 20);
+                    onSettingsChange('useSubjectPerYear', false);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('useIndex', false);
                     onSettingsChange('addedSubjects', []);
@@ -152,7 +153,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', true);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -163,7 +164,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   onClick={async () => {
                     onSettingsChange('startYear', new Date().getFullYear()-20);
                     onSettingsChange('endYear', new Date().getFullYear());
-                    onSettingsChange('topNSubjects', 100);
+                    onSettingsChange('topNSubjects', 5);
+                    onSettingsChange('useSubjectPerYear', true);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('useIndex', false);
                     onSettingsChange('addedSubjects', []);
@@ -174,7 +176,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -183,9 +185,33 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                 <button 
                   className="preset-button"
                   onClick={async () => {
+                    onSettingsChange('startYear', 2000);
+                    onSettingsChange('endYear', 2015);
+                    onSettingsChange('topNSubjects', 5);
+                    onSettingsChange('useSubjectPerYear', true);
+                    onSettingsChange('metaTags', ["", "", ""]);
+                    onSettingsChange('useIndex', false);
+                    onSettingsChange('addedSubjects', []);
+                    onSettingsChange('mainCharacterOnly', true);
+                    onSettingsChange('characterNum', 6);
+                    onSettingsChange('maxAttempts', 10);
+                    await setIndex("");
+                    onSettingsChange('enableHints', false);
+                    onSettingsChange('includeGame', false);
+                    onSettingsChange('subjectSearch', false);
+                    onSettingsChange('subjectTagNum', 8);
+                    onSettingsChange('characterTagNum', 6);
+                  }}
+                >
+                  老番享受者
+                </button>
+                <button 
+                  className="preset-button"
+                  onClick={async () => {
                     onSettingsChange('startYear', 2005);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 75);
+                    onSettingsChange('useSubjectPerYear', false);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', true);
@@ -195,7 +221,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', true);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 5);
                   }}
                 >
@@ -208,6 +234,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('startYear', new Date().getFullYear()-10);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 50);
+                    onSettingsChange('useSubjectPerYear', false);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', true);
@@ -217,7 +244,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
-                    onSettingsChange('subjectTagNum', 6);
+                    onSettingsChange('subjectTagNum', 8);
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
@@ -230,6 +257,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('startYear', new Date().getFullYear()-10);
                     onSettingsChange('endYear', new Date().getFullYear());
                     onSettingsChange('topNSubjects', 50);
+                    onSettingsChange('useSubjectPerYear', false);
                     onSettingsChange('metaTags', ["", "", ""]);
                     onSettingsChange('addedSubjects', []);
                     onSettingsChange('mainCharacterOnly', false);
@@ -253,25 +281,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
               <h3>范围设置</h3>
               
               <div className="settings-subsection">
-                <div className="settings-row">
-                  <label>关联游戏条目：</label>
-                  <input 
-                    type="checkbox"
-                    checked={gameSettings.includeGame}
-                    onChange={(e) => {
-                      onSettingsChange('includeGame', e.target.checked);
-                    }}
-                  />
-                  <span className="tooltip-trigger">
-                    ?
-                    <span className="tooltip-text">
-                      计算登场作品（年份、分数）时会包括游戏。<br/>
-                      但是，答案角色还是只会从动画中选取，因为游戏的热度榜有bug。<br/>
-                      如果想要猜游戏角色，可以自创一个目录或者添加额外作品。
-                    </span>
-                  </span>
-                </div>
-                <div className="settings-row">
+                <div className="settings-row" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                   <label>时间：</label>
                   <input 
                     type="number" 
@@ -296,6 +306,25 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     max="2100"
                     disabled={gameSettings.useIndex}
                   />
+                  <div style={{ marginLeft: '30px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <label>关联游戏条目</label>
+                    <span className="tooltip-trigger">
+                      ?
+                      <span className="tooltip-text">
+                        计算登场作品（年份、分数）时会包括游戏。<br/>
+                        但是，答案角色还是只会从动画中选取，因为游戏的热度榜有bug。<br/>
+                        如果想要猜游戏角色，可以自创一个目录或者添加额外作品。
+                      </span>
+                    </span>
+                    <input 
+                      type="checkbox"
+                      checked={gameSettings.includeGame}
+                      onChange={(e) => {
+                        onSettingsChange('includeGame', e.target.checked);
+                      }}
+                      style={{ marginRight: '50px', marginLeft: '0px' }}
+                    />
+                  </div>
                 </div>
                 <div className="filter-row">
                   <div className="filter-item">
@@ -392,8 +421,8 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     </span>
                   </span>
                 </div>
-                <div className="settings-row">
-                  <label>热度排行榜前</label>
+                <div className="settings-row" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <label>Bangumi热度排行榜{gameSettings.useSubjectPerYear ? '每年' : '共计'}</label>
                   <input 
                     type="number" 
                     value={gameSettings.topNSubjects === undefined ? '' : gameSettings.topNSubjects}
@@ -405,10 +434,55 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     max="1000"
                     disabled={gameSettings.useIndex}
                   />
-                  <label>部（Bangumi）（此为总数）</label>
+                  <label>部</label>
+                  <div style={{ marginLeft: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div className="toggle-switch-container" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                      <label style={{ marginRight: '8px', color: !gameSettings.useSubjectPerYear ? '#1890ff' : '#666' }}>总作品数</label>
+                      <div 
+                        className="toggle-switch" 
+                        style={{
+                          width: '40px',
+                          height: '20px',
+                          backgroundColor: gameSettings.useSubjectPerYear ? '#1890ff' : '#ccc',
+                          borderRadius: '10px',
+                          position: 'relative',
+                          cursor: gameSettings.useIndex ? 'not-allowed' : 'pointer',
+                          transition: 'background-color 0.3s',
+                        }}
+                        onClick={() => !gameSettings.useIndex && onSettingsChange('useSubjectPerYear', !gameSettings.useSubjectPerYear)}
+                      >
+                        <div 
+                          style={{
+                            width: '16px',
+                            height: '16px',
+                            backgroundColor: 'white',
+                            borderRadius: '50%',
+                            position: 'absolute',
+                            top: '2px',
+                            left: gameSettings.useSubjectPerYear ? '22px' : '2px',
+                            transition: 'left 0.3s',
+                          }}
+                        />
+                      </div>
+                      <label style={{ marginLeft: '8px', color: gameSettings.useSubjectPerYear ? '#1890ff' : '#666' }}>每年作品数</label>
+                      <span className="tooltip-trigger">
+                        ?
+                        <span className="tooltip-text">
+                          启用时会先抽取某一年份，再从中抽取作品。<br/>
+                          削弱了新番热度的影响。<br/>利好老二次元！
+                        </span>
+                      </span>
+                    </div>
+                  </div>
                 </div>
                 <div className="settings-row">
-                  <label>使用目录：</label>
+                  <label>使用目录</label>
+                  <span className="tooltip-trigger">
+                    ?
+                    <span className="tooltip-text">
+                      勾选时，正确答案只会从目录（+额外作品）中抽取。
+                    </span>
+                  </span>
                   <input 
                     type="checkbox"
                     checked={gameSettings.useIndex}
@@ -422,6 +496,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                         setIndexInfo(null);
                       }
                     }}
+                    style={{ marginRight: '50px', marginLeft: '0px' }}
                   />
                   {gameSettings.useIndex && (
                     <>
@@ -440,12 +515,6 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       </div>
                     </>
                   )}
-                  <span className="tooltip-trigger">
-                    ?
-                    <span className="tooltip-text">
-                      勾选时，正确答案只会从目录（+额外作品）中抽取。
-                    </span>
-                  </span>
                 </div>
                 {gameSettings.useIndex && indexInfo && (
                   <div className="settings-row index-info">
@@ -529,6 +598,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onChange={(e) => {
                       onSettingsChange('mainCharacterOnly', e.target.checked);
                     }}
+                    style={{ marginRight: '50px', marginLeft: '0px' }}
                   />
                 </div>
                 {!gameSettings.mainCharacterOnly && (
@@ -577,14 +647,39 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
 
             <div className="settings-section">
               <h3>游戏设置</h3>
-              <div className="settings-row">
-                <label>主播模式：</label>
+              <div className="settings-row" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <label>作品搜索</label>
+                <input 
+                  type="checkbox"
+                  checked={gameSettings.subjectSearch}
+                  onChange={(e) => {
+                    onSettingsChange('subjectSearch', e.target.checked);
+                  }}
+                  style={{ marginRight: '50px', marginLeft: '0px' }}
+                />
+                <label>启用提示</label>
+                <input 
+                  type="checkbox"
+                  checked={gameSettings.enableHints}
+                  onChange={(e) => {
+                    onSettingsChange('enableHints', e.target.checked);
+                  }}
+                  style={{ marginRight: '50px', marginLeft: '0px' }}
+                />
+                <label>主播模式</label>
+                <span className="tooltip-trigger">
+                  ?
+                  <span className="tooltip-text">
+                    tag {'=>'} tag.replace('乳', 'R')
+                  </span>
+                </span>
                 <input 
                   type="checkbox"
                   checked={gameSettings.enableTagCensor}
                   onChange={(e) => {
                     onSettingsChange('enableTagCensor', e.target.checked);
                   }}
+                  style={{ marginRight: '50px', marginLeft: '0px' }}
                 />
               </div>
               <div className="settings-row">
@@ -600,26 +695,6 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   max="15"
                 />
               </div>
-              <div className="settings-row">
-                <label>条目搜索：</label>
-                <input 
-                  type="checkbox"
-                  checked={gameSettings.subjectSearch}
-                  onChange={(e) => {
-                    onSettingsChange('subjectSearch', e.target.checked);
-                  }}
-                />
-              </div>
-              <div className="settings-row">
-                <label>*启用提示：</label>
-                <input 
-                  type="checkbox"
-                  checked={gameSettings.enableHints}
-                  onChange={(e) => {
-                    onSettingsChange('enableHints', e.target.checked);
-                  }}
-                />
-              </div>
 
               <div className="settings-row">
                 <label>*时间限制：</label>
@@ -627,6 +702,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   type="checkbox"
                   checked={gameSettings.timeLimit !== null}
                   onChange={(e) => onSettingsChange('timeLimit', e.target.checked ? 60 : null)}
+                  style={{ marginRight: '50px', marginLeft: '0px' }}
                 />
                 {gameSettings.timeLimit !== null && (
                   <div className="settings-row">

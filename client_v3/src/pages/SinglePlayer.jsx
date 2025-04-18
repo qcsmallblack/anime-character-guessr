@@ -29,9 +29,10 @@ function SinglePlayer() {
     first: null,
     second: null
   });
-  const [gameSettings, setGameSettings, removeGameSettings] = useLocalStorage('singleplayer-game-settings', {
+  const [gameSettings, setGameSettings] = useLocalStorage('singleplayer-game-settings', {
     startYear: new Date().getFullYear()-10,
     endYear: new Date().getFullYear(),
+    useSubjectPerYear: false,
     topNSubjects: 50,
     metaTags: ["", "", ""],
     useIndex: false,
@@ -45,7 +46,7 @@ function SinglePlayer() {
     timeLimit: null,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 6,
+    subjectTagNum: 8,
     enableTagCensor: false,
   });
 

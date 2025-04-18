@@ -33,6 +33,7 @@ const Multiplayer = () => {
     startYear: new Date().getFullYear()-5,
     endYear: new Date().getFullYear(),
     topNSubjects: 20,
+    useSubjectPerYear: false,
     metaTags: ["", "", ""],
     useIndex: false,
     indexId: null,
@@ -45,8 +46,8 @@ const Multiplayer = () => {
     timeLimit: 60,
     subjectSearch: true,
     characterTagNum: 6,
-    subjectTagNum: 6,
-    enableTagCensor: false,
+    subjectTagNum: 8,
+    enableTagCensor: false
   });
 
   // Game state
