@@ -91,7 +91,6 @@ async function getCharacterAppearances(characterId, gameSettings) {
         && (appearance.type === 2)
       );
     }
-    
     if (filteredAppearances.length === 0) {
       return {
         appearances: [],
@@ -179,7 +178,9 @@ async function getCharacterAppearances(characterId, gameSettings) {
       .sort((a, b) => Object.values(b)[0] - Object.values(a)[0]);
 
     // Only add one source tag to avoid confusion
-    allMetaTags.add(Object.keys(sortedSourceTags[0])[0]);
+    if (sortedSourceTags.length > 0) {
+      allMetaTags.add(Object.keys(sortedSourceTags[0])[0]);
+    }
 
     for (const tagObj of sortedMetaTags) {
       if (allMetaTags.size >= gameSettings.subjectTagNum) break;
