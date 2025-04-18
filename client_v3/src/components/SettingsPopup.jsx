@@ -476,7 +476,13 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   </div>
                 </div>
                 <div className="settings-row">
-                  <label>使用目录：</label>
+                  <label>使用目录</label>
+                  <span className="tooltip-trigger">
+                    ?
+                    <span className="tooltip-text">
+                      勾选时，正确答案只会从目录（+额外作品）中抽取。
+                    </span>
+                  </span>
                   <input 
                     type="checkbox"
                     checked={gameSettings.useIndex}
@@ -509,12 +515,6 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                       </div>
                     </>
                   )}
-                  <span className="tooltip-trigger">
-                    ?
-                    <span className="tooltip-text">
-                      勾选时，正确答案只会从目录（+额外作品）中抽取。
-                    </span>
-                  </span>
                 </div>
                 {gameSettings.useIndex && indexInfo && (
                   <div className="settings-row index-info">
@@ -667,6 +667,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   style={{ marginRight: '50px', marginLeft: '0px' }}
                 />
                 <label>主播模式</label>
+                <span className="tooltip-trigger">
+                  ?
+                  <span className="tooltip-text">
+                    tag => tag.replace('乳', 'R')
+                  </span>
+                </span>
                 <input 
                   type="checkbox"
                   checked={gameSettings.enableTagCensor}
