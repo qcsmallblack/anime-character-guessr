@@ -307,10 +307,15 @@ io.on('connection', (socket) => {
     }
 
     // Update player's guesses string
-    if (result === 'surrender') {
-      player.guesses += '🏳️';
-    } else {
-      player.guesses += result === 'win' ? '✌' : '💀';
+    switch (result) {
+      case 'surrender':
+        player.guesses += '🏳️';
+        break;
+      case 'win':
+        player.guesses += '✌';
+        break;
+      default:
+        player.guesses += '💀';
     }
 
     // Check if all players have ended their game or disconnected
