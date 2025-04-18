@@ -120,9 +120,25 @@
 .home-footer a {
   color: #333;
   text-decoration: none;
+  position: relative;
   transition: all 0.3s ease;
 }
 
+.home-footer a::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, #7cb8df, #0a9e48);
+  transition: width 0.3s ease;
+}
+
 .home-footer a:hover {
-  text-decoration: underline;
+  color: #3498db;
+}
+
+.home-footer a:hover::before {
+  width: 100%;
 }
