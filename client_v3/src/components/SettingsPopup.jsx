@@ -727,14 +727,16 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
             </div>
           </div>
         </div>
-        <div className="popup-footer">
+        <div className="popup-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {!hideRestart && (
             <>
-              <button className="restart-button" onClick={onRestart} style={{ marginRight: '10px' }}>
-                重新开始
-              </button>
-              <label style={{ fontSize: '0.8rem' }}>*设置改动点了才会生效！否则下一把生效</label>
-              <button className="clear-cache-button" onClick={handleClearCache} style={{ marginLeft: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <button className="restart-button" onClick={onRestart} style={{ marginRight: '10px' }}>
+                  重新开始
+                </button>
+                <label style={{ fontSize: '0.8rem' }}>*设置改动点了才会生效！否则下一把生效</label>
+              </div>
+              <button className="clear-cache-button" onClick={handleClearCache}>
                 清空缓存
               </button>
             </>
