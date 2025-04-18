@@ -670,7 +670,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                 <span className="tooltip-trigger">
                   ?
                   <span className="tooltip-text">
-                    tag => tag.replace('乳', 'R')
+                    tag {'=>'} tag.replace('乳', 'R')
                   </span>
                 </span>
                 <input 

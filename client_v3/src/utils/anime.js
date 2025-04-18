@@ -104,6 +104,16 @@ async function getCharacterAppearances(characterId, gameSettings) {
     let latestAppearance = -1;
     let earliestAppearance = -1;
     let highestRating = -1;
+    const sourceTagMap = new Map([
+      ['GAL改', '游戏改'],
+      ['轻小说改', '小说改'],
+      ['原创动画', '原创'],
+      ['网文改', '小说改'],
+      ['漫改', '漫画改'],
+      ['漫画改编', '漫画改'],
+      ['游戏改编', '游戏改'],
+      ['小说改编', '小说改']
+    ]);
     const sourceTags = new Set(['原创', '游戏改', '小说改', '漫画改']);
     const sourceTagCounts = new Map();
     const tagCounts = new Map(); // Track cumulative counts for each tag
@@ -144,8 +154,9 @@ async function getCharacterAppearances(characterId, gameSettings) {
 
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
-            if (name === '轻小说改'){
-              sourceTagCounts.set('小说改', (sourceTagCounts.get('小说改') || 0) + count);
+            if (sourceTagMap.has(name)) {
+              const mappedTag = sourceTagMap.get(name);
+              sourceTagCounts.set(mappedTag, (sourceTagCounts.get(mappedTag) || 0) + count);
             }
             else if (name != '日本') {
               tagCounts.set(name, (tagCounts.get(name) || 0) + count);
