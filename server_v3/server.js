@@ -46,7 +46,7 @@ io.on('connection', (socket) => {
         return;
     }
 
-    if (rooms.size >= 259) {
+    if (rooms.size >= 300) {
         socket.emit('error', { message: '服务器已满，请稍后再试' });
         return;
     }

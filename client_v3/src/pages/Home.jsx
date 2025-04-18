@@ -21,7 +21,7 @@ const Home = () => {
         </Link>
         <Link to="/multiplayer" className="mode-button">
           <h2>多人</h2>
-          <small>当前房间数: {roomCount}/259</small>
+          <small>当前房间数: {roomCount}/300</small>
         </Link>
       </div>
       <div className="home-footer">
