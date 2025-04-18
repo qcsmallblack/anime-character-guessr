@@ -102,3 +102,21 @@
   display: block;
   margin-top: 0.5rem;
 }
+
+.home-footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.home-footer a {
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.home-footer a:hover {
+  text-decoration: underline;
+}
