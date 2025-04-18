@@ -146,7 +146,7 @@ async function getCharacterAppearances(characterId, gameSettings) {
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
             if (name === '轻小说改'){
-              metaTagCounts.set('小说改', (metaTagCounts.get('小说改') || 0) + count);
+              sourceTagCounts.set('小说改', (sourceTagCounts.get('小说改') || 0) + count);
             }
             else if (name != '日本') {
               tagCounts.set(name, (tagCounts.get(name) || 0) + count);
