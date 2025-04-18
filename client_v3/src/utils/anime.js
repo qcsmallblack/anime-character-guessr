@@ -325,15 +325,14 @@ async function getRandomCharacter(gameSettings) {
       const startYear = gameSettings.startYear;
       const endYear = Math.min(gameSettings.endYear, new Date().getFullYear());
       const randomYear = startYear + Math.floor(Math.random() * (endYear - startYear + 1));
-
       const endDate = new Date(`${randomYear + 1}-01-01`);
       const today = new Date();
       const minDate = new Date(Math.min(endDate.getTime(), today.getTime())).toISOString().split('T')[0];
 
-      total = gameSettings.topNSubjects*(randomYear-startYear+1) + gameSettings.addedSubjects.length;
+      total = gameSettings.topNSubjects*(endYear-startYear+1) + gameSettings.addedSubjects.length;
       randomOffset = Math.floor(Math.random() * total);
-      
-      if (randomOffset >= gameSettings.topNSubjects) {
+
+      if (randomOffset >= gameSettings.topNSubjects*(endYear-startYear+1)) {
         randomOffset = randomOffset - gameSettings.topNSubjects;
         subject = gameSettings.addedSubjects[randomOffset];
       } 
