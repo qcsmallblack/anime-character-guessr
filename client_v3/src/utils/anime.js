@@ -490,14 +490,13 @@ function generateFeedback(guess, answerCharacter) {
 
   // Compare total number of appearances
   const appearanceDiff = guess.appearances.length - answerCharacter.appearances.length;
-  const twentyPercentAppearances = answerCharacter.appearances.length * 0.2;
   let appearancesFeedback;
   if (appearanceDiff === 0) {
     appearancesFeedback = '=';
   } else if (appearanceDiff > 0) {
-    appearancesFeedback = appearanceDiff <= twentyPercentAppearances ? '+' : '++';
+    appearancesFeedback = appearanceDiff <= 2 ? '+' : '++';
   } else {
-    appearancesFeedback = appearanceDiff >= -twentyPercentAppearances ? '-' : '--';
+    appearancesFeedback = appearanceDiff >= -2 ? '-' : '--';
   }
   result.appearancesCount = {
     guess: guess.appearances.length,
