@@ -22,6 +22,7 @@ function SinglePlayer() {
   const [answerCharacter, setAnswerCharacter] = useState(null);
   const [settingsPopup, setSettingsPopup] = useState(false);
   const [helpPopup, setHelpPopup] = useState(false);
+  const [finishInit, setFinishInit] = useState(false);
   const [currentTimeLimit, setCurrentTimeLimit] = useState(null);
   const [shouldResetTimer, setShouldResetTimer] = useState(false);
   const [currentSubjectSearch, setCurrentSubjectSearch] = useState(true);
@@ -62,6 +63,7 @@ function SinglePlayer() {
       try {
         const character = await getRandomCharacter(gameSettings);
         if (isMounted) {
+          console.log('获取角色', character);
           setAnswerCharacter(character);
           setGuessesLeft(gameSettings.maxAttempts);
           setCurrentTimeLimit(gameSettings.timeLimit);
@@ -85,6 +87,7 @@ function SinglePlayer() {
             second: hintTexts[1]
           });
           console.log('初始化游戏', gameSettings);
+          setFinishInit(true);
         }
       } catch (error) {
         console.error('Failed to initialize game:', error);
@@ -99,7 +102,7 @@ function SinglePlayer() {
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [gameSettings]);
 
   const handleCharacterSelect = async (character) => {
     if (isGuessing || !answerCharacter) return;
@@ -336,6 +339,7 @@ function SinglePlayer() {
         guessesLeft={guessesLeft}
         onRestart={handleRestartWithSettings}
         answerCharacter={answerCharacter}
+        finishInit={finishInit}
         hints={hints}
         onSurrender={handleSurrender}
       />
