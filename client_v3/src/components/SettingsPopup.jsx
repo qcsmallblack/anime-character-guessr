@@ -240,7 +240,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('mainCharacterOnly', true);
                     onSettingsChange('characterNum', 6);
                     onSettingsChange('maxAttempts', 10);
-                    await setIndex("74077");
+                    await setIndex("75522");
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', false);
                     onSettingsChange('subjectSearch', false);
@@ -248,7 +248,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
-                  木柜子乐队
+                  木柜子痴
                 </button>
                 <button 
                   className="preset-button"
@@ -263,7 +263,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('mainCharacterOnly', false);
                     onSettingsChange('characterNum', 10);
                     onSettingsChange('maxAttempts', 10);
-                    await setIndex("74622");
+                    await setIndex("75442");
                     onSettingsChange('enableHints', false);
                     onSettingsChange('includeGame', true);
                     onSettingsChange('subjectSearch', false);
@@ -271,7 +271,7 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                     onSettingsChange('characterTagNum', 6);
                   }}
                 >
-                  二游高手
+                  二游高手+
                 </button>
                 
               </div>
