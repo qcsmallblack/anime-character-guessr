@@ -667,6 +667,12 @@ function SettingsPopup({ gameSettings, onSettingsChange, onClose, onRestart, hid
                   style={{ marginRight: '50px', marginLeft: '0px' }}
                 />
                 <label>主播模式</label>
+                <span className="tooltip-trigger">
+                  ?
+                  <span className="tooltip-text">
+                    tag => tag.replace('乳', 'R')
+                  </span>
+                </span>
                 <input 
                   type="checkbox"
                   checked={gameSettings.enableTagCensor}
