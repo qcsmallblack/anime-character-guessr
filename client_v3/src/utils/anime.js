@@ -18,6 +18,9 @@ async function getSubjectDetails(subjectId) {
     if (airDate && new Date(airDate) > currentDate) {
       return null;
     }
+    else if (response.data.locked) {
+      return null;
+    }
 
     let year = airDate ? parseInt(airDate.split('-')[0]) : null;
     
