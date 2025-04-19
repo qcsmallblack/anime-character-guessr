@@ -237,6 +237,7 @@ function SinglePlayer() {
     setCurrentTimeLimit(gameSettings.timeLimit);
     setCurrentSubjectSearch(gameSettings.subjectSearch);
     setShouldResetTimer(false);
+    setFinishInit(false);
     setHints({
       first: null,
       second: null
@@ -265,6 +266,7 @@ function SinglePlayer() {
           second: hintTexts[1]
         });
         console.log('初始化游戏', gameSettings);
+        setFinishInit(true);
       } catch (error) {
         console.error('Failed to initialize new game:', error);
         alert('游戏初始化失败，请重试');
