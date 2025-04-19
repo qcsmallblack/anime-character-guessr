@@ -41,12 +41,12 @@ async function getSubjectDetails(subjectId) {
     
     const tags = [];
     if (response.data.type === 2) {
-      response.data.tags.slice(0, 10)
+      response.data.tags
         .filter(tag => !tag.name.includes('20'))
         .forEach(tag => tags.push({ [tag.name]: tag.count }));
     }
     if (response.data.type === 4) {
-      response.data.tags.slice(0, 5)
+      response.data.tags
         .filter(tag => !tag.name.includes('20'))
         .forEach(tag => tags.push({ [tag.name]: tag.count }));
     }
@@ -110,6 +110,7 @@ async function getCharacterAppearances(characterId, gameSettings) {
     const sourceTagMap = new Map([
       ['GAL改', '游戏改'],
       ['轻小说改', '小说改'],
+      ['轻改', '小说改'],
       ['原创动画', '原创'],
       ['网文改', '小说改'],
       ['漫改', '漫画改'],
@@ -127,8 +128,8 @@ async function getCharacterAppearances(characterId, gameSettings) {
     const appearances = await Promise.all(
       filteredAppearances.map(async appearance => {
         try {
+          const stuffFactor = appearance.staff === '主角' ? 2 : 1;
           const details = await getSubjectDetails(appearance.id);
-          
           if (!details || details.year === null) return null;
 
           if (!gameSettings.metaTags.filter(tag => tag !== '').every(tag => details.meta_tags.includes(tag))){
@@ -146,23 +147,24 @@ async function getCharacterAppearances(characterId, gameSettings) {
           }
 
           details.meta_tags.forEach(tag => {
-            if (tag === '日本') {
+            if (tag === '日本' || sourceTags.has(tag)) {
               return;
-            } else if (sourceTags.has(tag)) {
-              sourceTagCounts.set(tag, (sourceTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
             } else {
-              metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || 1));
+              metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || stuffFactor));
             }
           });
 
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
-            if (sourceTagMap.has(name)) {
+            if (sourceTags.has(name)) {
+              sourceTagCounts.set(name, (sourceTagCounts.get(name) || 0) + count*stuffFactor);
+            }
+            else if (sourceTagMap.has(name)) {
               const mappedTag = sourceTagMap.get(name);
-              sourceTagCounts.set(mappedTag, (sourceTagCounts.get(mappedTag) || 0) + count);
+              sourceTagCounts.set(mappedTag, (sourceTagCounts.get(mappedTag) || 0) + count*stuffFactor);
             }
             else if (name != '日本') {
-              tagCounts.set(name, (tagCounts.get(name) || 0) + count);
+              tagCounts.set(name, (tagCounts.get(name) || 0) + count*stuffFactor);
             }
           });
 

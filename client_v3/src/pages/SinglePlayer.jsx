@@ -63,7 +63,7 @@ function SinglePlayer() {
       try {
         const character = await getRandomCharacter(gameSettings);
         if (isMounted) {
-          console.log('获取角色', character);
+          // console.log('获取角色', character);
           setAnswerCharacter(character);
           setGuessesLeft(gameSettings.maxAttempts);
           setCurrentTimeLimit(gameSettings.timeLimit);
