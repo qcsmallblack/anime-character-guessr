@@ -5,8 +5,6 @@
 
 .multiplayer-container {
   width: 100%;
-
-  padding: 0.5rem;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -457,7 +455,7 @@
 }
 
 .visibility-button:hover {
-    background-color: #f0f0f0;
+  background-color: #e67e22;
 }
 
 .fa-angle-left {

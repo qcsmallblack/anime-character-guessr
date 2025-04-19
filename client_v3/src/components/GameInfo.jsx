@@ -1,6 +1,6 @@
 import '../styles/game.css';
 
-function GameInfo({ gameEnd, guessesLeft, onRestart, answerCharacter, hints, onSurrender }) {
+function GameInfo({ gameEnd, guessesLeft, onRestart, finishInit, hints, onSurrender }) {
   const showFirstHint = guessesLeft <= 5;
   const showSecondHint = guessesLeft <= 2;
 
@@ -15,7 +15,7 @@ function GameInfo({ gameEnd, guessesLeft, onRestart, answerCharacter, hints, onS
           <div className="game-controls">
             <span>剩余次数: {guessesLeft}</span>
             {onSurrender && (
-              <button className="surrender-button" onClick={onSurrender}>
+              <button disabled={!finishInit} className="surrender-button" onClick={onSurrender}>
                 投降 🏳️
               </button>
             )}

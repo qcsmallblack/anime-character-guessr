@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: 2rem;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f2 100%);
   color: #2c3e50;
 }
@@ -37,6 +36,7 @@
   z-index: 1;
   padding: 2rem;
   text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .mode-button::before {
@@ -85,6 +85,11 @@
   }
 }
 
+.mode-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
 .mode-button h2 {
   font-size: 1.8rem;
   margin-bottom: 1rem;
@@ -101,4 +106,38 @@
   color: #7f8c8d;
   display: block;
   margin-top: 0.5rem;
+}
+
+.home-footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.home-footer a {
+  color: #333;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.home-footer a::before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: linear-gradient(to right, #7cb8df, #0a9e48);
+  transition: width 0.3s ease;
+}
+
+.home-footer a:hover {
+  color: #3498db;
+}
+
+.home-footer a:hover::before {
+  width: 100%;
 }

@@ -9,21 +9,23 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  overflow-y: auto;
   padding: 20px;
+  overflow: hidden;
 }
 
 .popup-content {
   background: white;
   border-radius: 12px;
-  padding: 24px;
+  padding: 16px;
   width: 90%;
   max-width: 800px;
   position: relative;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   margin: auto;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .popup-close {
@@ -47,7 +49,7 @@
 
 .popup-header {
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 8px;
 }
 
 .popup-header h2 {
@@ -59,14 +61,37 @@
 .popup-body {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 /* Settings Popup Styles */
 .settings-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  max-height: calc(90vh - 100px);
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.settings-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.settings-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.settings-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .settings-section {
@@ -77,6 +102,7 @@
   background-color: #f8fafc;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+  margin-bottom: 8px;
 }
 
 .settings-section h3 {
@@ -95,6 +121,7 @@
   background-color: #fff;
   border-radius: 6px;
   border: 1px solid #e2e8f0;
+  margin-bottom: 4px;
 }
 
 .settings-subsection h4 {
@@ -109,6 +136,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-bottom: 4px;
 }
 
 .settings-row label {
@@ -694,7 +722,8 @@
 }
 
 .popup-footer {
-  padding-top: 10px;
+  margin-top: 16px;
+  flex-shrink: 0;
 }
 
 /* Tooltip styles */
@@ -760,14 +789,17 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  height: 100%;
+  overflow: hidden;
 }
 
 .character-preview {
+  flex-shrink: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 20px;
-  width: 100%;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .character-preview-image {
@@ -807,9 +839,28 @@
 }
 
 .tag-input-section {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.tag-input-section::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tag-input-section::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.tag-input-section::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.tag-input-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 .tag-input-group {
@@ -918,6 +969,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  padding-bottom: 16px;
 }
 
 .tag-group {

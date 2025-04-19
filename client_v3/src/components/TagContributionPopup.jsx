@@ -156,6 +156,10 @@ function TagContributionPopup({ character, onClose }) {
                       maxLength={8}
                       className={inputError ? 'has-error' : ''}
                       disabled={totalTags >= MAX_TAGS}
+                      style={{
+                        backgroundColor: '#ffffff',
+                        color: '#000000',
+                      }}
                     />
                     <button 
                       onClick={handleCustomTagAdd}

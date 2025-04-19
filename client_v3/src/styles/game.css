@@ -22,7 +22,6 @@ html, body, #root {
   padding: 2rem;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: relative;
-
 }
 
 .social-links {
@@ -114,6 +113,12 @@ html, body, #root {
 .surrender-button:hover {
   background: #dc2626;
   transform: translateY(-1px);
+}
+
+.surrender-button:disabled {
+  background: #e5e7eb ;
+  color: #9ca3af;
+  cursor: not-allowed;
 }
 
 .hint-container {
