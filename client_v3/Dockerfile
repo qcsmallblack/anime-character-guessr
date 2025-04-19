@@ -1,23 +1,32 @@
-# 使用 Node.js 20 作为基础镜像
-FROM node:20-alpine
+# --- Build Stage ---
+FROM node:20-alpine as builder
 
-# 设置工作目录
 WORKDIR /app
 
-# 复制 package.json 和 package-lock.json
 COPY package*.json ./
-
-# 安装依赖
 RUN npm install
 
-# 复制源代码
 COPY . .
-
-# 构建应用
+# Inject build-time env variables if needed (ensure they are prefixed with VITE_)
+ ARG VITE_SERVER_URL
+ ENV VITE_SERVER_URL=$VITE_SERVER_URL
+ ARG VITE_DB_SERVER_URL
+ ENV VITE_DB_SERVER_URL=$VITE_DB_SERVER_URL
+ ARG VITE_AES_SECRET
+ ENV VITE_AES_SECRET=$VITE_AES_SECRET
 RUN npm run build
 
-# 暴露端口
-EXPOSE 5173
+# --- Production Stage ---
+FROM nginx:alpine
 
-# 启动命令
-CMD ["npm", "run", "dev", "--", "--host"] 
+# Copy custom nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built assets from builder stage
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+# Expose port 80 (Nginx default)
+EXPOSE 80
+
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]

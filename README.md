@@ -15,6 +15,23 @@ npm run dev
 ```
 
 ### 2. docker 运行
+
+在根目录下新建env文件
+```env
+DOMAIN_NAME=http://[你的 IP]
+
+MONGODB_URI=mongodb://mongo:27017/tags
+
+CLIENT_INTERNAL_PORT=80
+SERVER_INTERNAL_PORT=3000
+DATA_SERVER_INTERNAL_PORT=3001
+NGINX_EXTERNAL_PORT=80
+
+AES_SECRET=YourSuperSecretKeyChangeMe
+
+
+SERVER_URL=http://[你的 IP]:3000
+```
 使用项目中的 `docker-compose` 文件一键运行：
 ```
 docker-compose up --build
