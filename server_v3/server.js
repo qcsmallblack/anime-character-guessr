@@ -12,12 +12,9 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 const SERVER_URL = process.env.SERVER_URL || 'http://localhost:3000';
 
 const cors_options = {
-    origin: [
-        CLIENT_URL,
-        SERVER_URL
-    ],
-      methods: ['GET', 'POST'],
-      credentials: true
+  origin: '*',
+  methods: ['GET', 'POST'],
+  credentials: true
 }
 
 const io = new Server(server, {
@@ -42,13 +39,13 @@ io.on('connection', (socket) => {
     }
 
     if (rooms.has(roomId)) {
-        socket.emit('error', { message: '房间已存在？但为什么？' });
-        return;
+      socket.emit('error', { message: '房间已存在？但为什么？' });
+      return;
     }
 
     if (rooms.size >= 300) {
-        socket.emit('error', { message: '服务器已满，请稍后再试' });
-        return;
+      socket.emit('error', { message: '服务器已满，请稍后再试' });
+      return;
     }
 
     rooms.set(roomId, {
@@ -80,8 +77,8 @@ io.on('connection', (socket) => {
   socket.on('joinRoom', ({ roomId, username }) => {
     // Basic validation
     if (!username || username.trim().length === 0) {
-        socket.emit('error', { message: '用户名呢' });
-        return;
+      socket.emit('error', { message: '用户名呢' });
+      return;
     }
 
     const room = rooms.get(roomId);

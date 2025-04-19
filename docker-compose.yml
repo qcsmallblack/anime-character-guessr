@@ -1,34 +1,115 @@
-version: '3.8'
+version: "3.8"
 
 services:
+  # Main Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: main_nginx_proxy
+    ports:
+      - "${NGINX_EXTERNAL_PORT:-80}:80" # Expose port 80 externally
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Mount custom Nginx config
+      # Optional: Mount domain specific config if needed
+      # - ./nginx/conf.d:/etc/nginx/conf.d:ro
+    depends_on:
+      - client
+      - server
+      - data_server
+    networks:
+      - app-network
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME:-localhost} # Pass domain name to nginx config if needed via envsubst
+
+  # Client Application (React served by Nginx)
   client:
     build:
       context: ./client_v3
       dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
+      # Pass build arguments from .env (ensure they start with VITE_)
+      args:
+        - VITE_SERVER_URL=${VITE_SERVER_URL}
+        - VITE_DB_SERVER_URL=${VITE_DB_SERVER_URL}
+        - VITE_AES_SECRET=${VITE_AES_SECRET}
+    container_name: client_app
+    # No ports exposed externally, accessed via main_nginx_proxy
+    # Expose internal port for nginx upstream
+    expose:
+      - "80"
     environment:
-      - VITE_SERVER_URL=http://localhost:3000
-      - VITE_DB_SERVER_URL=http://localhost:3001
-      - VITE_AES_SECRET=My-Secret-Key
-    depends_on:
-      - server
+      # Runtime env vars are generally not needed for static builds
+      # unless entrypoint script uses them. Nginx runs the show here.
+      # VITE variables are build-time only unless handled specifically.
+      - VITE_SERVER_URL=${VITE_SERVER_URL}
+      - VITE_DB_SERVER_URL=${VITE_DB_SERVER_URL}
+      - VITE_AES_SECRET=${VITE_AES_SECRET}
     networks:
       - app-network
+    restart: unless-stopped
 
+  # Game Server (Node.js + Socket.IO)
   server:
     build:
       context: ./server_v3
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
+    container_name: game_server
+    # No ports exposed externally
+    expose:
+      - "${SERVER_INTERNAL_PORT:-3000}" # Expose internal port for nginx upstream
     environment:
-      - PORT=3000
-      - CLIENT_URL=http://localhost:5173
-      - SERVER_URL=http://localhost:3000
+      - PORT=${SERVER_INTERNAL_PORT:-3000}
+      - SERVER_CORS_ORIGIN=${SERVER_CORS_ORIGIN} # Use env var for CORS
+      - SERVER_SELF_URL=${SERVER_SELF_URL} # Use env var for self-ping
+      - NODE_ENV=production
     networks:
       - app-network
+    restart: unless-stopped
 
+  # Data Server (Node.js API)
+  data_server:
+    build:
+      context: ./data_server
+      dockerfile: Dockerfile
+    container_name: data_server_api
+    # No ports exposed externally
+    expose:
+      - "${DATA_SERVER_INTERNAL_PORT:-3001}" # Expose internal port for nginx upstream
+    environment:
+      - PORT=${DATA_SERVER_INTERNAL_PORT:-3001}
+      - MONGODB_URI=${MONGODB_URI}
+      - DATA_SERVER_CORS_ORIGIN=${DATA_SERVER_CORS_ORIGIN} # Use env var for CORS
+      - NODE_ENV=production
+    depends_on:
+      - mongo # Ensure mongo starts before data_server tries to connect
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # MongoDB Database
+  mongo:
+    image: mongo:latest # Use a specific version in production, e.g., mongo:6.0
+    container_name: mongodb
+    volumes:
+      - mongo_data:/data/db # Persist database data
+    # No ports exposed externally, accessed only by data_server via network
+    expose:
+      - "27017"
+    networks:
+      - app-network
+    restart: unless-stopped
+    # Optional: Add healthcheck for depends_on condition
+    # healthcheck:
+    #   test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 40s
+
+# Define the network
 networks:
   app-network:
-    driver: bridge 
+    driver: bridge
+
+# Define persistent volume for MongoDB data
+volumes:
+  mongo_data:
+    driver: local

@@ -14,7 +14,7 @@ RUN npm install --omit=dev
 COPY . .
 
 # 暴露端口 (Internal port)
-EXPOSE 3000
+EXPOSE 3001
 
-# 启动命令 (Use start script for production)
+# 启动命令
 CMD ["npm", "start"]
