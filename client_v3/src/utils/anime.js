@@ -118,8 +118,10 @@ async function getCharacterAppearances(characterId, gameSettings) {
       ['游戏改编', '游戏改'],
       ['小说改编', '小说改']
     ]);
-    const sourceTags = new Set(['原创', '游戏改', '小说改', '漫画改']);
+    const sourceTagSet = new Set(['原创', '游戏改', '小说改', '漫画改']);
+    const regionTagSet = new Set(['日本', '欧美', '美国', '中国', '法国', '韩国', '英国', '俄罗斯', '中国香港', '苏联', '捷克', '中国台湾', '马来西亚']);
     const sourceTagCounts = new Map();
+    const regionTags = new Set();
     const tagCounts = new Map(); // Track cumulative counts for each tag
     const metaTagCounts = new Map(); // Track cumulative counts for each meta tag
     const allMetaTags = new Set();
@@ -147,23 +149,33 @@ async function getCharacterAppearances(characterId, gameSettings) {
           }
 
           details.meta_tags.forEach(tag => {
-            if (tag === '日本' || sourceTags.has(tag)) {
+            if (sourceTagSet.has(tag)) {
               return;
-            } else {
+            }
+            else if (regionTagSet.has(tag)) {
+              regionTags.add(tag);
+            }
+            else {
               metaTagCounts.set(tag, (metaTagCounts.get(tag) || 0) + (tagCounts.get(tag) || stuffFactor));
             }
           });
 
           details.tags.forEach(tagObj => {
             const [[name, count]] = Object.entries(tagObj);
-            if (sourceTags.has(name)) {
+            if (sourceTagSet.has(name)) {
               sourceTagCounts.set(name, (sourceTagCounts.get(name) || 0) + count*stuffFactor);
+            }
+            else if (regionTagSet.has(name)) {
+              regionTags.add(name);
             }
             else if (sourceTagMap.has(name)) {
               const mappedTag = sourceTagMap.get(name);
               sourceTagCounts.set(mappedTag, (sourceTagCounts.get(mappedTag) || 0) + count*stuffFactor);
             }
-            else if (name != '日本') {
+            else if (regionTags.has(name)) {
+              return;
+            }
+            else {
               tagCounts.set(name, (tagCounts.get(name) || 0) + count*stuffFactor);
             }
           });
@@ -211,6 +223,8 @@ async function getCharacterAppearances(characterId, gameSettings) {
       if (allMetaTags.size >= gameSettings.subjectTagNum+gameSettings.characterTagNum) break;
       allMetaTags.add(Object.keys(tagObj)[0]);
     }
+
+    regionTags.forEach(tag => allMetaTags.add(tag));
     
     const validAppearances = appearances
       .filter(appearance => appearance !== null)
